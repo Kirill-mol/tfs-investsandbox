@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5430/sweater
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver

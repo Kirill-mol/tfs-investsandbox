@@ -1,8 +1,16 @@
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
+    database: postgresql
+    hibernate:
+      ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5430/sweater
+    url: jdbc:postgresql://localhost:5432/investing_sandbox
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
+
+jwt:
+  token:
+    secret: jwtappdemo
+    expired: 3600000

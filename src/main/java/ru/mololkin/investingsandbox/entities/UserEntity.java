@@ -14,6 +14,7 @@ import java.util.Set;
  *
  * @author Mololkin Kirill
  */
+
 @Data
 @Entity
 @Builder
@@ -22,7 +23,9 @@ import java.util.Set;
 @Table(name = "usr")
 @EqualsAndHashCode(callSuper = true)
 public class UserEntity extends BaseEntity {
-    @Column(name = "email")
+
+    @Email
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password")
@@ -36,8 +39,9 @@ public class UserEntity extends BaseEntity {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "usr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StockPortfolioEntity> portfolios = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<StockPortfolioEntity> portfolios;
 }
 
 

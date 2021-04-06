@@ -6,5 +6,5 @@ import ru.mololkin.investingsandbox.entities.UserEntity;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    List<UserEntity>findAllByUsername(String username);
+    UserEntity findByEmail(String email);
 }

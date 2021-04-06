@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author Mololkin Kirill
  */
+
 @Data
 @Entity
 @Builder
@@ -19,19 +20,16 @@ import java.util.List;
 @Table(name = "stock_portfolio")
 @EqualsAndHashCode(callSuper = true)
 public class StockPortfolioEntity extends BaseEntity {
-
-    @NotBlank
     @Column(name = "name")
     private String name;
 
-    @NotBlank
     @Column(name = "balance")
     private Long balance;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity usr;
+    private UserEntity user;
 
-    @OneToMany(mappedBy = "stockPortfolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "stock_portfolio_id")
     private List<PortfolioUnitEntity> portfolioUnits;
 }

@@ -5,8 +5,10 @@ plugins {
 }
 
 group = 'ru.mololkin'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '11'
+
+apply from: './versions.gradle'
 
 configurations {
 	compileOnly {
@@ -20,12 +22,18 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "${jsonwebtoken}"
+
 	compileOnly 'org.projectlombok:lombok'
+
+	runtime 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
+
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

@@ -1,12 +1,27 @@
+buildscript {
+	ext {
+		springBootVersion = '2.4.4'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath(
+				"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		)
+	}
+}
+
 plugins {
-	id 'org.springframework.boot' version '2.4.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.4.4'
 	id 'java'
 }
 
 group = 'ru.mololkin'
 version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '11'
+
 
 apply from: './versions.gradle'
 
@@ -16,6 +31,12 @@ configurations {
 	}
 }
 
+
+springBoot {
+	mainClassName = 'ru.mololkin.investingsandbox.InvestingSandboxApplication'
+}
+
+
 repositories {
 	mavenCentral()
 }
@@ -24,8 +45,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: "${jsonwebtoken}"
+	implementation group: 'io.swagger.core.v3', name: 'swagger-annotations',
+			version: "${swagger_annotations}"
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui',
+			version: "${spring_doc}"
 
 	compileOnly 'org.projectlombok:lombok'
 
@@ -40,4 +66,16 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+
+def dest = 'docker/services/app'
+
+tasks.register('copy', Copy) {
+	from 'build/libs'
+	into dest
+}
+
+task buildAndCopy(dependsOn: [copy, build]) {
+	println 'done'
 }

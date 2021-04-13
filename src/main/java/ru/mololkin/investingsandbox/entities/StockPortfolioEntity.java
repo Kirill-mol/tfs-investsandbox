@@ -3,7 +3,6 @@ package ru.mololkin.investingsandbox.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -25,6 +24,10 @@ public class StockPortfolioEntity extends BaseEntity {
 
     @Column(name = "balance")
     private Long balance;
+
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "portfolio_currency", joinColumns = @JoinColumn(name = "stock_portfolio_id"))
+    private Currency currency;
 
     @ManyToOne
     private UserEntity user;

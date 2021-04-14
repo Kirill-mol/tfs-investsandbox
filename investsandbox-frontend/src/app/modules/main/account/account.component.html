@@ -1,0 +1,10 @@
+<tui-island>
+    <div class="flex-container">
+        <div class="flex-container__login">
+            <tui-avatar [autoColor]="true" size="l" [text]="account.login"></tui-avatar>
+            <h2 class="tui-island__title no-margin">{{account.login}}</h2>
+        </div>
+        <button tuiButton size="xs" appearance="flat" (click)="turnEditForm()">Редактировать профиль</button>
+    </div>
+    <app-auth-form *ngIf="editFormOpened" [edit]="true" [login]="account.login"></app-auth-form>
+</tui-island>

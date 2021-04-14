@@ -1,0 +1,13 @@
+<form [formGroup]="form" class="form">
+  <div class="form_container">
+    <tui-group>
+      <tui-input formControlName="login">
+        Логин
+      </tui-input>
+      <tui-input-password formControlName="password">
+        Пароль
+      </tui-input-password>
+    </tui-group>
+    <button tuiButton size="m" [disabled]="form.invalid">{{edit ? 'Изменить' : 'Зарегистрироваться или войти'}}</button>
+  </div>
+</form>

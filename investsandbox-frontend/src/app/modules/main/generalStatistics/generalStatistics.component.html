@@ -1,0 +1,19 @@
+<h2 class="tui-text_h3">Топ выигрышных стратегий</h2>
+<div class="flex-container">
+  <tui-island size="l">
+    <h3 class="tui-island__title">По приросту доходности</h3>
+    <h3 class="tui-island__paragraph">В процентах</h3>
+  </tui-island>
+  <tui-island size="l">
+    <h3 class="tui-island__title">По абсолютному доходу</h3>
+    <form [formGroup]="form" class="form-currency">
+      <tui-group [collapsed]="true">
+        <tui-radio-block formControlName="currency" item="rub" [hideRadio]="true" size="s">В рублях</tui-radio-block>
+        <tui-radio-block formControlName="currency" item="euro" [hideRadio]="true" size="s">В долларах</tui-radio-block>
+        <tui-radio-block formControlName="currency" item="usd" [hideRadio]="true" size="s">В евро</tui-radio-block>
+      </tui-group>
+    </form>
+  </tui-island>
+</div>
+
+

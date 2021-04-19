@@ -1,0 +1,4 @@
+<form class="form" [formGroup]="form">
+  <tui-input-number class="form__input" tuiTextfieldSize="s" formControlName="count">Введите количество</tui-input-number>
+  <button tuiButton size="s" [disabled]="form.invalid">Продать</button>
+</form>

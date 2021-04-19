@@ -1,25 +1,24 @@
+import {
+  IBackendApi,
+  IBackendApiToken,
+} from './../../../../shared/interfaces/IBackendApi';
 import { Account } from './../../../../shared/models/account.model';
-import { AuthService } from './../../../../shared/services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.less']
+  styleUrls: ['./account.component.less'],
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent {
   account: Account;
   editFormOpened = false;
 
-  constructor(private authService: AuthService) { 
-    this.account = this.authService.account;
-  }
-
-  ngOnInit() {
+  constructor(@Inject(IBackendApiToken) private backendService: IBackendApi) {
+    this.account = this.backendService.account;
   }
 
   turnEditForm() {
     this.editFormOpened = !this.editFormOpened;
   }
-
 }

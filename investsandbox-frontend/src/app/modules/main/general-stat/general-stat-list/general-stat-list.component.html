@@ -1,0 +1,21 @@
+<div [ngSwitch]="incomeType">
+  <div *ngSwitchCase="'percent'">
+    <div [ngSwitch]="range">
+      <div *ngSwitchCase="'month'" class="flex-container">
+        <tui-island *ngFor="let item of topOfIncomes.percent.onMonth">
+          <app-general-stat-list-content [currency]="currency" [incomeType]="incomeType" [item]="item"></app-general-stat-list-content>
+        </tui-island>
+      </div>
+      <div *ngSwitchDefault class="flex-container">
+        <tui-island *ngFor="let item of topOfIncomes.percent.onAllTime">
+          <app-general-stat-list-content [currency]="currency" [incomeType]="incomeType" [item]="item"></app-general-stat-list-content>
+        </tui-island>
+      </div>
+    </div>
+  </div>
+  <div *ngSwitchDefault class="flex-container">
+    <tui-island *ngFor="let item of topOfIncomes.absolute">
+      <app-general-stat-list-content [currency]="currency" [incomeType]="incomeType" [item]="item"></app-general-stat-list-content>
+    </tui-island>
+  </div>
+</div>

@@ -1,4 +1,7 @@
+import { Portfolio } from './portfolio.model';
+
 export type Account = {
-  id?: number;
-  login: string;
+  nickname: string;
+  email: string;
+  portfolios: Portfolio[];
 }

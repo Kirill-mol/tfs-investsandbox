@@ -1,0 +1,1 @@
+export type AuthFormType = 'auth' | 'edit' | 'registration';

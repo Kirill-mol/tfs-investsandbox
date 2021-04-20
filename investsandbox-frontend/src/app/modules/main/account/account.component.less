@@ -1,0 +1,36 @@
+.flex-container {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+
+  &__login {
+    align-items: center;
+    display: flex;
+    gap: 20px;
+
+    &__info {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__buttons {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.no-margin {
+  margin: 0;
+}
+
+	
+button[appearance='custom'] {
+  color: var(--tui-negative);
+  transition: 0.6s;
+
+  &:hover {
+      background: var(--tui-error-bg-hover);
+  }
+}

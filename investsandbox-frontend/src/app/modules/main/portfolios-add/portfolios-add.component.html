@@ -1,0 +1,33 @@
+<tui-island>
+  <form class="tui-form" [formGroup]="form">
+    <div class="tui-form__row">
+      <tui-group>
+        <tui-input class="group-title" formControlName="title">
+          Название
+        </tui-input>
+        <tui-select class="group-currency" formControlName="currency">
+          Валюта
+          <tui-data-list-wrapper
+          *tuiDataList
+          [items]="currencies">
+          </tui-data-list-wrapper>
+        </tui-select>
+        <tui-input-number formControlName="initBalance" [postfix]="form.get('currency')?.value | tuiCurrency">
+          Начальный баланс
+        </tui-input-number>
+      </tui-group>
+    </div>
+    <div class="tui-form__buttons form__submit">
+      <div class="tui-text_body-l form__sumbit__text">
+        Я хочу создать портфель
+        <span>{{form.get('title')?.value}}</span>
+        <span *ngIf="form.get('currency')?.valid">
+          с начальным балансом
+          <span>{{form.get('initBalance')?.value | tuiFormatNumber}}</span>
+          <span>{{form.get('currency')?.value | tuiCurrency}}</span>
+        </span>
+      </div>
+      <button tuiButton class="tui-form__button" size="m" [disabled]="form.invalid">Создать!</button>
+    </div>
+  </form>
+</tui-island>

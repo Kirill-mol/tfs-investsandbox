@@ -1,0 +1,9 @@
+<div class="flex-container">
+  <h2 class="tui-text_h3">Мои портфели</h2>
+  <button tuiButton size="s" appearance="flat" (click)="turnAddPortfolioForm()">Создать новый</button>
+</div>
+<app-portfolios-add *ngIf="portfoliosAddFormOpened"></app-portfolios-add>
+<div class="margin-bottom" *ngIf="portfoliosAddFormOpened"></div>
+<div class="portfolios-container">
+  <app-portfolios-item *ngFor="let item of portfolios" [portfolio]="item"></app-portfolios-item>
+</div>

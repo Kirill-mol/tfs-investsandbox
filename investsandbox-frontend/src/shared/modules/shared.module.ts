@@ -21,7 +21,6 @@ import { TuiFormatNumberPipeModule } from '@taiga-ui/core';
     PercentModule,
     ChartDrawerModule
   ],
-  declarations: [FormatAbbreviatureCurrencyPipe, ConvertCurrencyPipe],
-  providers: [{ provide: IYahooApiToken, useClass: YahooApiMockService }],
+  declarations: [FormatAbbreviatureCurrencyPipe, ConvertCurrencyPipe]
 })
 export class SharedModule {}

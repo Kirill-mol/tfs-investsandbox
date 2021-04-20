@@ -1,8 +1,10 @@
+import { CookiesService } from './../shared/services/cookies.service';
+import { ICookiesToken } from './../shared/interfaces/ICookies';
+import { BackendApiService } from './../shared/services/backendApi.service';
 import { YahooApiMockService } from './../shared/services/yahooApiMock.service';
 import { IYahooApiToken } from './../shared/interfaces/IYahooApi';
 import { StatisticService } from './../shared/services/statistic.service';
 import { IStatisticToken } from './../shared/interfaces/IStatistic';
-import { BackendApiMockService } from './../shared/services/backendApiMock.service';
 import { IBackendApiToken } from './../shared/interfaces/IBackendApi';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { RegistrationModule } from './modules/registration/registration.module';
@@ -26,11 +28,11 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     BrowserAnimationsModule,
     TuiRootModule,
-    AppRoutingModule,
     RegistrationModule,
     MainModule,
     PortfolioModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [
     {
@@ -39,7 +41,7 @@ import { CommonModule } from '@angular/common';
     },
     {
       provide: IBackendApiToken,
-      useClass: BackendApiMockService
+      useClass: BackendApiService
     }, 
     {
       provide: IStatisticToken,
@@ -48,6 +50,10 @@ import { CommonModule } from '@angular/common';
     {
       provide: IYahooApiToken,
       useClass: YahooApiMockService
+    },
+    {
+      provide: ICookiesToken,
+      useClass: CookiesService
     }
   ],
   bootstrap: [AppComponent]

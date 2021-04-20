@@ -5,26 +5,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.mololkin.investingsandbox.dto.AuthRequestDto;
 import ru.mololkin.investingsandbox.dto.AuthResponseDto;
 import ru.mololkin.investingsandbox.entities.UserEntity;
+import ru.mololkin.investingsandbox.properties.JwtProperties;
 import ru.mololkin.investingsandbox.security.jwt.JwtTokenProvider;
 import ru.mololkin.investingsandbox.service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/auth")
+@RequestMapping("/auth")
 public class AuthRestController {
     private final AuthenticationManager authManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final JwtProperties jwtProperties;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequestDto requestDto) {
@@ -35,20 +36,24 @@ public class AuthRestController {
 
             UserEntity user = userService.findByEmail(email);
 
-
             if (user == null) {
                 throw new UsernameNotFoundException(String.format("User with email: %s not found", email));
             }
 
             String token = jwtTokenProvider.createToken(email, user.getRoles());
 
-            AuthResponseDto responseDto = new AuthResponseDto(email, token);
+            AuthResponseDto responseDto = AuthResponseDto.builder()
+                    .email(email)
+                    .token(token)
+                    .expiration(jwtProperties.getExpiration()).build();
 
             return ResponseEntity.ok(responseDto);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");
         }
     }
+
+
 
 }
 

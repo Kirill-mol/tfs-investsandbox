@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import ru.mololkin.investingsandbox.entities.Role;
+import ru.mololkin.investingsandbox.properties.JwtProperties;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -21,17 +22,14 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.token.secret}")
-    private String secret;
-
-    @Value("${jwt.token.expired}")
-    private Long validityInMills;
-
+    private final JwtProperties properties;
     private final UserDetailsService userDetailsService;
+
+    private String secret;
 
     @PostConstruct
     protected void init() {
-        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        secret = Base64.getEncoder().encodeToString(properties.getSecret().getBytes());
     }
 
     public String createToken(String email, Set<Role> roles) {
@@ -39,7 +37,7 @@ public class JwtTokenProvider {
         claims.put("roles", getRoleNames(roles));
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMills);
+        Date validity = new Date(now.getTime() + properties.getExpiration());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -73,9 +71,7 @@ public class JwtTokenProvider {
     }
 
     private List<String> getRoleNames(Set<Role> userRoles) {
-        List<String> collect = userRoles.stream()
+        return userRoles.stream()
                 .map(Role::getAuthority).collect(Collectors.toList());
-        System.out.println(collect);
-        return collect;
     }
 }

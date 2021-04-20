@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.mololkin.investingsandbox.entities.Role;
 import ru.mololkin.investingsandbox.security.jwt.JwtConfigurer;
 import ru.mololkin.investingsandbox.security.jwt.JwtTokenProvider;
 
@@ -17,9 +16,9 @@ import ru.mololkin.investingsandbox.security.jwt.JwtTokenProvider;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
-    private static final String REGISTER_ENDPOINT = "/api/v1/register";
+    private static final String ADMIN_ENDPOINT = "admin/**";
+    private static final String LOGIN_ENDPOINT = "/auth/login";
+    private static final String REGISTER_ENDPOINT = "/register";
     private static final String ACTUATOR_ENDPOINT = "/actuator/**";
 
 

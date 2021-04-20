@@ -19,7 +19,7 @@ plugins {
 }
 
 group = 'ru.mololkin'
-version = '0.0.2-SNAPSHOT'
+version = '0.0.3-SNAPSHOT'
 sourceCompatibility = '11'
 
 
@@ -52,6 +52,7 @@ dependencies {
 			version: "${swagger_annotations}"
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui',
 			version: "${spring_doc}"
+
 
 	compileOnly 'org.projectlombok:lombok'
 

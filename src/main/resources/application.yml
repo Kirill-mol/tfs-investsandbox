@@ -12,8 +12,11 @@ spring:
 
 jwt:
   token:
-    secret: jwtappdemo
-    expired: 3600000
+    secret: "jwtappdemo"
+    expiration: 3600000
+
+exchanger:
+  key: "38adc22e4ea8eeb6871794019825f2d1"
 
 server:
   port: ${PORT:8080}

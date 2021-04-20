@@ -9,9 +9,9 @@ export interface IBackendApi {
   account: Account;
   portfolios: Portfolio[];
 
-  auth(email: string, password: string): Observable<string>;
+  login(email: string, password: string): Observable<string>;
 
-  registration(nickname: string, email: string, password: string): Observable<string>;
+  registration(nickname: string, email: string, password: string): Observable<Account>;
 
   portfolioExists(title: string): boolean;
 

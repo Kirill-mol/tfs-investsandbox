@@ -1,5 +1,9 @@
+import {
+  IBackendApi,
+  IBackendApiToken,
+} from './../../../../shared/interfaces/IBackendApi';
 import { TuiOrientation } from '@taiga-ui/core';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -45,6 +49,8 @@ export class AuthFormComponent implements OnInit {
 
   verticalOrientation = TuiOrientation.Vertical;
 
+  constructor(@Inject(IBackendApiToken) private backendService: IBackendApi) {}
+
   ngOnInit() {
     switch (this.type) {
       case 'auth':
@@ -82,5 +88,21 @@ export class AuthFormComponent implements OnInit {
         );
         break;
     }
+  }
+
+  registration() {
+    this.backendService
+      .registration(
+        this.form.get('nickname')?.value,
+        this.form.get('email')?.value,
+        this.form.get('password')?.value
+      )
+      .subscribe((account) => {
+        console.log(account);
+      }, (error) => {
+        console.log(error);
+      }, () => {
+        console.log(1);
+      });
   }
 }

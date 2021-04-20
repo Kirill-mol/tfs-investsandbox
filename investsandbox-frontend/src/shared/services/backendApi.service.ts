@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Account } from '../models/account.model';
 import { Portfolio } from '../models/portfolio.model';
 
+const host = 'http://localhost:8091';
+
 @Injectable({providedIn: 'root'})
 export class BackendApiService implements IBackendApi {
   private _account: Account = {
@@ -23,12 +25,16 @@ export class BackendApiService implements IBackendApi {
 
   constructor(private httpClient: HttpClient) { }
 
-  auth(email: string, password: string): Observable<string> {
-    throw new Error('Method not implemented.');
+  login(email: string, password: string): Observable<string> {
+    return this.httpClient.get<string>(`${host}/auth/login`);
   }
 
-  registration(nickname: string, email: string, password: string): Observable<string> {
-    throw new Error('Method not implemented.');
+  registration(nickname: string, email: string, password: string): Observable<Account> {
+    return this.httpClient.post<any>(`${host}/register`, {
+      nickname,
+      email,
+      password
+    });
   }
 
   portfolioExists(title: string): boolean {

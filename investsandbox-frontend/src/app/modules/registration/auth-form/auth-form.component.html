@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="tui-form form">
+<form [formGroup]="form" class="tui-form form" (submit)="registration()">
   <div class="form_container">
     <tui-group [orientation]="verticalOrientation">
       <tui-group>
@@ -18,7 +18,7 @@
         </tui-input-password>
       </tui-group>
     </tui-group>
-    <button tuiButton size="m" [disabled]="form.invalid">
+    <button type="submit" tuiButton size="m" [disabled]="form.invalid">
       <span [ngSwitch]="type">
         <span *ngSwitchCase="'auth'">Войти</span>
         <span *ngSwitchCase="'edit'">Изменить</span>

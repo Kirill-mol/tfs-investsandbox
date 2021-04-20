@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    show-sql: false
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/investing_sandbox}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:1234}
+    driver-class-name: org.postgresql.Driver
+
+jwt:
+  token:
+    secret: "jwtappdemo"
+    expiration: 3600000
+
+exchanger:
+  key: "38adc22e4ea8eeb6871794019825f2d1"
+
+server:
+  port: ${PORT:8080}

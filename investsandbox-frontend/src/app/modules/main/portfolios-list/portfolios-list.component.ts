@@ -10,7 +10,7 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 
 export class PortfoliosListComponent {
   portfoliosAddFormOpened = false;
-  portfolios!: Portfolio[];
+  portfolios: Portfolio[] | null;
 
   constructor(@Inject(IBackendToken) private backendService: IBackend) {
     this.portfolios = backendService.portfolios;

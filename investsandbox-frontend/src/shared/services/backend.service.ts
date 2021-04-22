@@ -7,18 +7,14 @@ import { Account } from '../models/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService implements IBackend {
-  private _account: Account = {
-    email: '',
-    nickname: '',
-    portfolios: [],
-  };
+  private _account: Account | null = null;
 
   get account() {
     return this._account;
   }
 
   get portfolios() {
-    return this._account.portfolios;
+    return this._account?.portfolios ? this._account.portfolios : null;
   }
 
   constructor(
@@ -41,7 +37,7 @@ export class BackendService implements IBackend {
 
   newPortfolio(title: string, balance: number, currency: Currency) {
     return this.backendApiService.newPortfolio(title, balance, currency).pipe(map(portfolio => {
-      this._account.portfolios.push(portfolio);
+      this._account?.portfolios.push(portfolio);
     }));
   }
 }

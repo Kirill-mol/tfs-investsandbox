@@ -41,10 +41,10 @@ export class AuthFormComponent implements OnInit {
   type: AuthFormType = 'login';
 
   @Input()
-  nickname!: string;
+  nickname: string | undefined;
 
   @Input()
-  email!: string;
+  email: string | undefined;
 
   readonly authFormType = AuthFormTypeEnum;
 
@@ -75,7 +75,7 @@ export class AuthFormComponent implements OnInit {
           },
           [
             passwordConfirmValidator(),
-            modifiedValidator(this.nickname, this.email),
+            modifiedValidator(this.nickname || '', this.email || ''),
           ]
         );
         break;

@@ -14,7 +14,7 @@ export class UpdaterService {
   ) {}
 
   private updateIteration() {
-    this.backendService.portfolios.forEach((portfolio) => {
+    this.backendService.portfolios?.forEach((portfolio) => {
       portfolio.realBalance = this.statisticService.calcRealBalance(portfolio);
       portfolio.income = {
         percent: {

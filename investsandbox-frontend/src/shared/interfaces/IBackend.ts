@@ -7,8 +7,8 @@ import { Currency } from '../models/currency.model';
 export const IBackendToken = new InjectionToken('IBackend');
 
 export interface IBackend {
-  account: Account;
-  portfolios: Portfolio[];
+  account: Account | null;
+  portfolios: Portfolio[] | null;
 
   getAccount(): Observable<void>;
 

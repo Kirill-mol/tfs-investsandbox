@@ -11,7 +11,7 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
   styleUrls: ['./account.component.less'],
 })
 export class AccountComponent {
-  account: Account;
+  account: Account | null;
   editFormOpened = false;
 
   constructor(

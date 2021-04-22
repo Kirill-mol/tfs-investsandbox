@@ -13,11 +13,4 @@ public class WebConfig implements WebMvcConfigurer {
 	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder.build();
 	}
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry
-				.addMapping("/**")
-				.allowedMethods("*");
-	}
 }

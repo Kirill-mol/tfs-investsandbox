@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.mololkin.investingsandbox.security.jwt.JwtConfigurer;
 import ru.mololkin.investingsandbox.security.jwt.JwtTokenProvider;
 
+import java.util.Arrays;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -57,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         registry
                 .addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .allowedHeaders("Origin, X-Requested-With, Content-Type, Accept, Authorization");
     }
 }

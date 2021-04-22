@@ -1,9 +1,9 @@
-import {
-  IBackendApi,
-  IBackendApiToken,
-} from './../../../../shared/interfaces/IBackendApi';
+import { NavigationService } from './../../../../shared/services/navigation.service';
+import { AuthService } from './../../../../shared/services/auth.service';
+import { IAuthToken } from './../../../../shared/interfaces/IAuth';
 import { Account } from './../../../../shared/models/account.model';
 import { Component, Inject } from '@angular/core';
+import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 
 @Component({
   selector: 'app-account',
@@ -14,11 +14,20 @@ export class AccountComponent {
   account: Account;
   editFormOpened = false;
 
-  constructor(@Inject(IBackendApiToken) private backendService: IBackendApi) {
+  constructor(
+    @Inject(IBackendToken) private backendService: IBackend,
+    @Inject(IAuthToken) private authService: AuthService,
+    private navifationService: NavigationService
+  ) {
     this.account = this.backendService.account;
   }
 
   turnEditForm() {
     this.editFormOpened = !this.editFormOpened;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.navifationService.toLogin();
   }
 }

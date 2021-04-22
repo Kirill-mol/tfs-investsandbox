@@ -5,11 +5,11 @@
     <div class="quotes-list__quote">
       <div>
         <div [ngSwitch]="quote.quoteType">
-          <div class="tui-island__category" *ngSwitchCase="'CURRENCY'">
+          <div class="tui-island__category" *ngSwitchCase="quoteType.CURRENCY">
             Валюта
           </div>
-          <div class="tui-island__category" *ngSwitchCase="'EQUITY'">Акция</div>
-          <div class="tui-island__category" *ngSwitchCase="'ETF'">Фонд</div>
+          <div class="tui-island__category" *ngSwitchCase="quoteType.EQUITY">Акция</div>
+          <div class="tui-island__category" *ngSwitchCase="quoteType.ETF">Фонд</div>
         </div>
         <h4 class="tui-island__title quotes-list__quote__shortname">
           {{ quote.shortname }}
@@ -39,7 +39,7 @@
       </div>
       <div>
         <app-chart-drawer
-          [size]="'small'"
+          [size]="chartSizes.SMALL"
           [data]="quote.history?.onMonth || [0, 0, 0]"
         ></app-chart-drawer>
       </div>

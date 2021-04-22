@@ -10,7 +10,7 @@
         </div>
         <div class="flex-container__buttons">
             <button tuiButton size="s" appearance="flat" (click)="turnEditForm()">Редактировать профиль</button>
-            <button tuiButton size="s" appearance="custom">Выйти из системы</button>
+            <button tuiButton size="s" appearance="custom" (click)="logout()">Выйти из системы</button>
         </div>
     </div>
     <app-auth-form *ngIf="editFormOpened" type="edit" [nickname]="account.nickname" [email]="account.email"></app-auth-form>

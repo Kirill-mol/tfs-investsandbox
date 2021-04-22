@@ -1,9 +1,10 @@
+import { RangeEnum } from './../../../shared/models/range.model';
 import { NavigationService } from './../../../shared/services/navigation.service';
 import { ActivatedRoute } from '@angular/router';
-import { IBackendApi, IBackendApiToken } from './../../../shared/interfaces/IBackendApi';
 import { UpdaterService } from './../../../shared/services/updater.service';
 import { Portfolio } from './../../../shared/models/portfolio.model';
 import { Component, Inject, OnInit } from '@angular/core';
+import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 
 @Component({
   selector: 'app-portfolio',
@@ -11,12 +12,14 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['portfolio.component.less'],
 })
 export class PortfolioComponent implements OnInit {
+  readonly ranges = RangeEnum;
+
   portfolio!: Portfolio;
 
   constructor(private updater: UpdaterService,
     private route: ActivatedRoute,
     private navigator: NavigationService,
-    @Inject(IBackendApiToken) private backendService: IBackendApi 
+    @Inject(IBackendToken) private backendService: IBackend
   ) {}
 
   ngOnInit() {

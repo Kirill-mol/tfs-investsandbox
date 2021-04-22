@@ -1,4 +1,5 @@
-import { Range } from './../../../shared/models/range.model';
+import { ChartSize, ChartSizeEnum } from './../../../shared/models/chartSize.model';
+import { Range, RangeEnum } from './../../../shared/models/range.model';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -14,12 +15,14 @@ export class ChartDrawerComponent {
   data!: number[];
 
   @Input()
-  range: Range = 'month';
+  range: Range = RangeEnum.MONTH;
 
   @Input()
-  size: 'small' | 'big' = 'big';
+  size: ChartSize = ChartSizeEnum.BIG;
 
-  horizontalLinesCount = 8;
+  readonly chartSize = ChartSizeEnum;
+
+  readonly horizontalLinesCount = 8;
 
   getMapData(): [number, number][] {
     return this.data.map((val, index) => [index, val]);
@@ -31,7 +34,7 @@ export class ChartDrawerComponent {
 
     for (let i = 0; i < this.data.length; i++) {
       dates[this.data.length - i - 1] =
-        this.range === 'month'
+        this.range === RangeEnum.MONTH
           ? this.getMonthAndDay(
               new Date(now - (i + 1) * this._day).toDateString()
             )
@@ -50,7 +53,7 @@ export class ChartDrawerComponent {
 
     for (
       let i = 0;
-      i < (this.size === 'big' ? this.horizontalLinesCount : 3);
+      i < (this.size === ChartSizeEnum.BIG ? this.horizontalLinesCount : 3);
       i++
     ) {
       labels.push(Math.round(this.getMinOfData() + i * range).toString());

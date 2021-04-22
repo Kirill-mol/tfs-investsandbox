@@ -1,48 +1,38 @@
+import { Currency } from './../models/currency.model';
+import { UrlEnum } from './../models/url.model';
 import { IBackendApi } from './../interfaces/IBackendApi';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Account } from '../models/account.model';
-import { Portfolio } from '../models/portfolio.model';
-
-const host = 'http://localhost:8091';
 
 @Injectable({providedIn: 'root'})
 export class BackendApiService implements IBackendApi {
-  private _account: Account = {
-    nickname: '',
-    email: '',
-    portfolios: []
-  };
-
-  get account() {
-    return this._account;
-  }
-  
-  get portfolios() {
-    return this._account.portfolios;
-  }
-
   constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string): Observable<string> {
-    return this.httpClient.get<string>(`${host}/auth/login`);
+  getAccount() {
+    return this.httpClient.get<Account>(UrlEnum.ACCOUNT);
   }
 
-  registration(nickname: string, email: string, password: string): Observable<Account> {
-    return this.httpClient.post<any>(`${host}/register`, {
+  login(email: string, password: string) {
+    return this.httpClient.post<any>(UrlEnum.LOGIN, {
+      email,
+      password
+    });
+  }
+
+  registration(nickname: string, email: string, password: string) {
+    return this.httpClient.post<any>(UrlEnum.REGISTER, {
       nickname,
       email,
       password
     });
   }
 
-  portfolioExists(title: string): boolean {
-    return this.getPortfolioByTitle(title) ? true : false;
+  newPortfolio(title: string, balance: number, currency: Currency) {
+    return this.httpClient.post<any>(UrlEnum.PORTFOLIO, {
+      name: title,
+      balance,
+      currency
+    })
   }
-
-  getPortfolioByTitle(title: string): Portfolio | undefined {
-    return this.portfolios.find(portfolio => portfolio.title === title);
-  }
-  
 }

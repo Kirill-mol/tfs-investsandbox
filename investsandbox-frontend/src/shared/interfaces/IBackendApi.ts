@@ -1,19 +1,17 @@
-import { Observable } from 'rxjs';
 import { Portfolio } from './../models/portfolio.model';
+import { Currency } from './../models/currency.model';
+import { Observable } from 'rxjs';
 import { Account } from './../models/account.model';
 import { InjectionToken } from '@angular/core';
 
 export const IBackendApiToken = new InjectionToken('IBackendApi');
 
 export interface IBackendApi {
-  account: Account;
-  portfolios: Portfolio[];
-
-  login(email: string, password: string): Observable<string>;
+  login(email: string, password: string): Observable<{email: string, token: string, expiration: number}>;
 
   registration(nickname: string, email: string, password: string): Observable<Account>;
 
-  portfolioExists(title: string): boolean;
+  getAccount(): Observable<Account>;
 
-  getPortfolioByTitle(title: string) : Portfolio | undefined;
+  newPortfolio(title: string, balance: number, currency: Currency): Observable<Portfolio>;
 }

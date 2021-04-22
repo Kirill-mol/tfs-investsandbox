@@ -1,10 +1,11 @@
+import { IncomeType, IncomeTypeEnum } from './../../../../../shared/models/incomeType.model';
 import { TopOfIncome } from './../../../../../shared/models/topOfIncome.model';
-import { Range } from '../../../../../shared/models/range.model';
+import { Range, RangeEnum} from '../../../../../shared/models/range.model';
 import {
   IStatistic,
   IStatisticToken,
 } from '../../../../../shared/interfaces/IStatistic';
-import { Currency } from '../../../../../shared/models/currency.model';
+import { Currency, CurrencyEnum } from '../../../../../shared/models/currency.model';
 import { Component, Inject, Input } from '@angular/core';
 
 @Component({
@@ -14,13 +15,17 @@ import { Component, Inject, Input } from '@angular/core';
 })
 export class GeneralStatListComponent {
   @Input()
-  incomeType: 'percent' | 'absolute' = 'percent';
+  incomeType: IncomeType = IncomeTypeEnum.PERCENT;
 
   @Input()
-  currency: Currency = 'RUB';
+  currency: Currency = CurrencyEnum.RUB;
 
   @Input()
-  range: Range = 'month';
+  range: Range = RangeEnum.MONTH;
+
+  readonly incomeTypes = IncomeTypeEnum;
+
+  readonly ranges = RangeEnum;
 
   topOfIncomes!: TopOfIncome;
 

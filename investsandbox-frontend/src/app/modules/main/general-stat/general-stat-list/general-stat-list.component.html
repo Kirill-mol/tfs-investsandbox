@@ -1,7 +1,7 @@
 <div [ngSwitch]="incomeType">
-  <div *ngSwitchCase="'percent'">
+  <div *ngSwitchCase="incomeTypes.PERCENT">
     <div [ngSwitch]="range">
-      <div *ngSwitchCase="'month'" class="flex-container">
+      <div *ngSwitchCase="ranges.MONTH" class="flex-container">
         <tui-island *ngFor="let item of topOfIncomes.percent.onMonth">
           <app-general-stat-list-content [currency]="currency" [incomeType]="incomeType" [item]="item"></app-general-stat-list-content>
         </tui-island>

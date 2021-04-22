@@ -1,11 +1,12 @@
+import { CurrencyEnum } from './../models/currency.model';
 import { IYahooApi, IYahooApiToken } from './../interfaces/IYahooApi';
-import { IBackendApi, IBackendApiToken } from './../interfaces/IBackendApi';
 import { TopOfIncomeItem } from './../models/topOfIncome.model';
-import { Range } from './../models/range.model';
+import { Range, RangeEnum } from './../models/range.model';
 import { Portfolio } from './../models/portfolio.model';
 import { IStatistic } from './../interfaces/IStatistic';
 import { Inject, Injectable } from '@angular/core';
 import { TopOfIncome } from '../models/topOfIncome.model';
+import { IBackend, IBackendToken } from '../interfaces/IBackend';
 
 @Injectable({ providedIn: 'root' })
 export class StatisticService implements IStatistic {
@@ -22,7 +23,7 @@ export class StatisticService implements IStatistic {
   }
 
   constructor(
-    @Inject(IBackendApiToken) private backendService: IBackendApi,
+    @Inject(IBackendToken) private backendService: IBackend,
     @Inject(IYahooApiToken) private yahooService: IYahooApi
   ) {}
 
@@ -69,7 +70,7 @@ export class StatisticService implements IStatistic {
     portfolios.forEach((portfolio) => {
       let income: number;
 
-      if (range === 'month') {
+      if (range === RangeEnum.MONTH) {
         income =
           portfolio.income?.percent?.onMonth ||
           this.calcPercentIncome(portfolio, range);
@@ -101,7 +102,7 @@ export class StatisticService implements IStatistic {
       if (income > 0) {
         top.push({
           portfolioTitle: portfolio.title,
-          incomeValue: portfolio.currency !== 'RUB' ? this.yahooService.convertCurrencies(income, portfolio.currency, 'RUB') : income,
+          incomeValue: portfolio.currency !== CurrencyEnum.RUB ? this.yahooService.convertCurrencies(income, portfolio.currency, CurrencyEnum.RUB) : income,
         });
       }
     });

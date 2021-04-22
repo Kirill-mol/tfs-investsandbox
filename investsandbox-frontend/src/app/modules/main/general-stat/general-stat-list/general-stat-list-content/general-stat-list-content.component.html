@@ -1,10 +1,10 @@
 <div class="flex-container">
   <h3 class="tui-island__title">{{ item.portfolioTitle }}</h3>
-  <span *ngIf="incomeType === 'percent'">{{ item.incomeValue | tuiFormatNumber}} %</span>
+  <span *ngIf="incomeType === incomeTypes.PERCENT">{{ item.incomeValue | tuiFormatNumber}} %</span>
   <tui-money
     [colored]="true"
     [currency]="currency"
-    [value]="item.incomeValue | convertCurrency: 'RUB' : currency"
-    *ngIf="incomeType === 'absolute'"
+    [value]="item.incomeValue | convertCurrency: currencies.RUB : currency"
+    *ngIf="incomeType === incomeTypes.ABSOLUTE"
   ></tui-money>
 </div>

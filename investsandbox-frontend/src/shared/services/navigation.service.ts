@@ -1,11 +1,11 @@
-import { IBackendApi, IBackendApiToken } from '../interfaces/IBackendApi';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { IBackend, IBackendToken } from '../interfaces/IBackend';
 
 @Injectable({providedIn: 'root'})
 export class NavigationService {
   constructor(
-    @Inject(IBackendApiToken) private backendService: IBackendApi,
+    @Inject(IBackendToken) private backendService: IBackend,
     private router: Router
   ) {}
 

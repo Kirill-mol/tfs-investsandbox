@@ -1,4 +1,4 @@
-import { Quote } from './../../../shared/models/quote.model';
+import { Quote } from '../../../../../shared/models/quote.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';

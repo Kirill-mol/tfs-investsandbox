@@ -1,4 +1,4 @@
-import { Currency } from './../models/currency.model';
+import { Currency, CurrencyEnum } from './../models/currency.model';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -8,12 +8,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FormatAbbreviatureCurrencyPipe implements PipeTransform {
   transform(value: Currency): string {
     switch (value) {
-      case 'EUR':
+      case CurrencyEnum.EUR:
         return 'Евро';
-      case 'RUB':
+      case CurrencyEnum.RUB:
         return 'Рубль';
-      case 'USD':
+      case CurrencyEnum.USD:
         return 'Доллар США';
     }
+    return value;
   }
 }

@@ -28,7 +28,7 @@
     </div>
     <div *ngIf="portfolio.history.onAllTime.length > 1">
       <h4 class="tui-island__paragraph">За все время</h4>
-      <app-chart-drawer [range]="'all'" [data]="portfolio.history.onAllTime"></app-chart-drawer>
+      <app-chart-drawer [range]="ranges.ALL" [data]="portfolio.history.onAllTime"></app-chart-drawer>
     </div>
   </tui-island>
   <app-portfolio-quotes [quotes]="portfolio.quotes"></app-portfolio-quotes>

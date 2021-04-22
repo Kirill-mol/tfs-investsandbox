@@ -1,5 +1,5 @@
-import { QuotesSellModule } from './../../quotes-sell/quotes-sell.module';
-import { QuotesBuyModule } from './../../quotes-buy/quotes-buy.module';
+import { QuotesSellModule } from './quotes-sell/quotes-sell.module';
+import { QuotesBuyModule } from './quotes-buy/quotes-buy.module';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TuiIslandModule } from '@taiga-ui/kit';
 import { SharedModule } from './../../../../shared/modules/shared.module';
@@ -17,4 +17,4 @@ import { PortfolioQuotesComponent } from './portfolio-quotes.component';
   exports: [PortfolioQuotesComponent],
   declarations: [PortfolioQuotesComponent]
 })
-export class PortfolioQuotesModule { }
+export class PortfolioQuotesModule {}

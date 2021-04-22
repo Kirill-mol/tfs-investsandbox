@@ -1,3 +1,4 @@
+/*
 package ru.mololkin.investingsandbox.config;
 
 import org.springframework.stereotype.Component;
@@ -6,9 +7,11 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+*/
 /**
  * @author Kirill Mololkin kir.mololkin@yandex.ru 22.04.2021
- */
+ *//*
+
 @Component
 public class SimpleCORSFilter implements Filter {
 
@@ -27,3 +30,4 @@ public class SimpleCORSFilter implements Filter {
 	public void destroy() {}
 
 }
+*/

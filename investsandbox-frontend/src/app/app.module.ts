@@ -1,3 +1,4 @@
+import { YahooService } from './../shared/services/yahoo.service';
 import { AddTokenInterceptor } from './../shared/interceptors/AddToken.interceptor';
 import { AuthService } from './../shared/services/auth.service';
 import { IAuthToken } from './../shared/interfaces/IAuth';
@@ -21,6 +22,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { IBackendToken } from 'src/shared/interfaces/IBackend';
+import { IYahooToken } from 'src/shared/interfaces/IYahoo';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,10 @@ import { IBackendToken } from 'src/shared/interfaces/IBackend';
       useValue: iconsPathFactory('assets/taiga-ui/icons/')
     },
     {
+      provide: IBackendToken,
+      useClass: BackendService
+    },
+    {
       provide: IBackendApiToken,
       useClass: BackendApiService
     }, 
@@ -51,12 +57,12 @@ import { IBackendToken } from 'src/shared/interfaces/IBackend';
       useClass: StatisticService
     },
     {
-      provide: IYahooApiToken,
-      useClass: YahooApiMockService
+      provide: IYahooToken,
+      useClass: YahooService
     },
     {
-      provide: IBackendToken,
-      useClass: BackendService
+      provide: IYahooApiToken,
+      useClass: YahooApiMockService
     },
     {
       provide: IAuthToken,

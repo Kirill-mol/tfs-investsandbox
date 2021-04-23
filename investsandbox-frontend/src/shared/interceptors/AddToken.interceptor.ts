@@ -29,10 +29,8 @@ export class AddTokenInterceptor implements HttpInterceptor {
 
         return next.handle(authReq);
       }
-
       this.navigationService.toLogin();
     }
-
     return next.handle(req);
   }
 }

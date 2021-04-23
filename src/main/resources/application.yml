@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/investing_sandbox}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5429/investing_sandbox}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver

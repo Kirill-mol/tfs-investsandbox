@@ -20,7 +20,6 @@ public class MainController {
 
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
-    private final CurrencyExchanger currencyExchanger;
 
     @GetMapping("/test")
     public List<UserDto> testFindAll() {
@@ -29,9 +28,8 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String hello() throws JsonProcessingException {
-        double exchange = currencyExchanger.exchange(Currency.EUR, Currency.RUB, 1000.0);
-        return Double.toString(exchange);
+    public String hello() {
+        return "Welcome to my investing sandbox REST-API";
     }
 
 }

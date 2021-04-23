@@ -2,6 +2,7 @@ package ru.mololkin.investingsandbox.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import ru.mololkin.investingsandbox.service.UserService;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user/portfolio")
@@ -38,12 +40,15 @@ public class PortfolioController {
 		String email = tokenProvider.getEmail(token);
 
 		try {
+			newStockPortfolio.setBalance(1000.0);
 			StockPortfolioEntity stockPortfolio = userService.addPortfolio(email, newStockPortfolio);
 			return ResponseEntity.ok(stockPortfolioMapper.map(stockPortfolio));
 		} catch (RuntimeException e) {
+			log.info(e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+
 
 	@PostMapping("/quote")
 	public ResponseEntity<?> buyPortfolioUnit(
@@ -84,3 +89,4 @@ public class PortfolioController {
 
 	}
 }
+

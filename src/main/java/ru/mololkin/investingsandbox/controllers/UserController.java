@@ -11,8 +11,8 @@ import ru.mololkin.investingsandbox.security.jwt.JwtTokenProvider;
 import ru.mololkin.investingsandbox.service.UserService;
 
 @RestController
-@RequestMapping(value = "/user")
 @RequiredArgsConstructor
+@RequestMapping(value = "/user")
 public class UserController {
 
 	private final UserService userService;
@@ -20,18 +20,23 @@ public class UserController {
 	private final JwtTokenProvider tokenProvider;
 
 	@GetMapping("/profile")
-	public ResponseEntity<UserDto> getUserProfile(@RequestHeader("Authorization") String token) {
-		UserEntity user = userService.findByEmail(tokenProvider.getEmail(token));
+	public UserDto getUserProfile(@RequestHeader("Authorization") String token) {
+		try {
+			UserEntity user = userService.findByEmail(tokenProvider.getEmail(token));
 
-		UserDto userDto = userEntityMapper.map(user);
-
-		return ResponseEntity.ok(userDto);
+			return userEntityMapper.map(user);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return new UserDto();
+		}
 	}
 
 	@PutMapping("/profile")
 	public ResponseEntity<UserDto> updateUserProfile(@RequestHeader("Authorization") String token,
 	                                                 @RequestBody UpdateUserDto updateUserDto
 	) {
+
 		UserEntity user = userService.findByEmail(tokenProvider.getEmail(token));
 
 		UserEntity updatedUser = userService.updateUser(user, updateUserDto);

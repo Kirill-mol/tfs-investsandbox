@@ -1,4 +1,4 @@
-package ru.mololkin.investingsandbox.dto;
+package ru.mololkin.investingsandbox.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

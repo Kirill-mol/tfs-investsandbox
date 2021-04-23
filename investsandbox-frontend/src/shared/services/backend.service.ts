@@ -1,3 +1,4 @@
+import { Portfolio } from './../models/portfolio.model';
 import { Currency } from './../models/currency.model';
 import { map } from 'rxjs/operators';
 import { IBackendApi, IBackendApiToken } from './../interfaces/IBackendApi';
@@ -25,9 +26,27 @@ export class BackendService implements IBackend {
     @Inject(IBackendApiToken) private backendApiService: IBackendApi
   ) {}
 
+  private parsePortfolio(portfolio: any): Portfolio {
+    return {
+      title: portfolio.name,
+      currency: portfolio.currency,
+      initBalance: portfolio.initBalance,
+      balance: portfolio.balance,
+      quotes: portfolio.quotes,
+      history: {
+        onMonth: portfolio.monthHistory,
+        onAllTime: portfolio.allTimeHistory
+      }
+    }
+  }
+
   getAccount() {
     return this.backendApiService.getAccount().pipe(map(account => {
-      this._account = account;
+      this._account = {
+        email: account.email,
+        nickname: account.nickname,
+        portfolios: account.portfolios.map(portfolio => this.parsePortfolio(portfolio))
+      }
     }));
   }
 
@@ -41,7 +60,8 @@ export class BackendService implements IBackend {
 
   newPortfolio(title: string, balance: number, currency: Currency) {
     return this.backendApiService.newPortfolio(title, balance, currency).pipe(map(portfolio => {
-      this._account?.portfolios.push(portfolio);
+      console.log(this.parsePortfolio(portfolio), portfolio);
+      this._account.portfolios.push(this.parsePortfolio(portfolio));
     }));
   }
 }

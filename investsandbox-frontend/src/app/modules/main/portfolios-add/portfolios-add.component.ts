@@ -26,7 +26,7 @@ export class PortfoliosAddComponent {
   submitForm() {
     this.backendService.newPortfolio(
       this.form.get('title')?.value,
-      Number.parseInt(this.form.get('balance')?.value),
+      Number.parseInt(this.form.get('initBalance')?.value),
       this.form.get('currency')?.value
     ).subscribe(() => {
       console.log('Success!');

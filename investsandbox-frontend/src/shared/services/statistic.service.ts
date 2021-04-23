@@ -65,9 +65,9 @@ export class StatisticService implements IStatistic {
 
   getTopPortfoliosOfPercentIncome(range: Range) {
     const top: TopOfIncomeItem[] = [];
-    const portfolios: Portfolio[] | null = this.backendService.portfolios;
+    const portfolios: Portfolio[] = this.backendService.portfolios;
 
-    portfolios?.forEach((portfolio) => {
+    portfolios.forEach((portfolio) => {
       let income: number;
 
       if (range === RangeEnum.MONTH) {
@@ -93,9 +93,9 @@ export class StatisticService implements IStatistic {
 
   getTopPortfoliosOfAbsoluteIncome() {
     const top: TopOfIncomeItem[] = [];
-    const portfolios: Portfolio[] | null = this.backendService.portfolios;
+    const portfolios: Portfolio[] = this.backendService.portfolios;
 
-    portfolios?.forEach((portfolio) => {
+    portfolios.forEach((portfolio) => {
       let income =
         portfolio.income?.absolute || this.calcAbsoluteIncome(portfolio);
 

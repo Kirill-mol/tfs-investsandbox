@@ -34,7 +34,16 @@ services:
     depends_on:
       - app
     ports:
-      - 8989:8989
+      - 80:8989
+
+  angular:
+    build:
+      context: ../investsandbox-frontend
+      dockerfile: Dockerfile.development
+    ports:
+      - 4200:4200
+    depends_on:
+      - nginx
 
 volumes:
   db-data:

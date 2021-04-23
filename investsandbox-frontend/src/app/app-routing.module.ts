@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'main', component: MainComponent
   },
   {
-    path: '**', redirectTo: '/main'
+    path: '**', redirectTo: '/login'
   }
 ];
 

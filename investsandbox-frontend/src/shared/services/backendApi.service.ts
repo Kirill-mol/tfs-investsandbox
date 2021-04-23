@@ -10,7 +10,7 @@ export class BackendApiService implements IBackendApi {
   constructor(private httpClient: HttpClient) { }
 
   getAccount() {
-    return this.httpClient.get<Account>(UrlEnum.ACCOUNT);
+    return this.httpClient.get<{email: string, nickname: string, portfolios: []}>(UrlEnum.ACCOUNT);
   }
 
   login(email: string, password: string) {

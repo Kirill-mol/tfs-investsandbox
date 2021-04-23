@@ -1,4 +1,4 @@
-const host = 'http://localhost:8989';
+const host = 'http://localhost';
 
 export const UrlEnum = {
   HOST: host,

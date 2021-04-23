@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
-                .csrf().disable()
+                .cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
@@ -54,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         return new BCryptPasswordEncoder();
     }
 
-/*    @Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
                 .allowedMethods("*");
-    }*/
+    }
 }

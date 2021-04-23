@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.mololkin.investingsandbox.dto.ExchangeResponse;
+import ru.mololkin.investingsandbox.dto.response.ExchangeResponse;
 import ru.mololkin.investingsandbox.entities.Currency;
 
 import java.net.URI;

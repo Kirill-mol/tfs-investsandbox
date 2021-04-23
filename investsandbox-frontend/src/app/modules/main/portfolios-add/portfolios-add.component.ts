@@ -1,6 +1,8 @@
-import { Currency } from './../../../../shared/models/currency.model';
+import { IBackend } from './../../../../shared/interfaces/IBackend';
+import { IBackendToken } from 'src/shared/interfaces/IBackend';
+import { CurrencyEnum } from './../../../../shared/models/currency.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-portfolios-add',
@@ -8,7 +10,7 @@ import { Component } from '@angular/core';
   styleUrls: ['portfolios-add.component.less'],
 })
 export class PortfoliosAddComponent {
-  currencies: Currency[] = ['RUB', 'USD', 'EUR'];
+  currencies = [CurrencyEnum.RUB, CurrencyEnum.EUR, CurrencyEnum.USD];
 
   form = new FormGroup({
     title: new FormControl(null, Validators.required),
@@ -18,4 +20,18 @@ export class PortfoliosAddComponent {
       Validators.min(1),
     ]),
   });
+
+  constructor(@Inject(IBackendToken) private backendService: IBackend) {}
+
+  submitForm() {
+    this.backendService.newPortfolio(
+      this.form.get('title')?.value,
+      Number.parseInt(this.form.get('balance')?.value),
+      this.form.get('currency')?.value
+    ).subscribe(() => {
+      console.log('Success!');
+    }, (error) => {
+      console.log(error);
+    });
+  }
 }

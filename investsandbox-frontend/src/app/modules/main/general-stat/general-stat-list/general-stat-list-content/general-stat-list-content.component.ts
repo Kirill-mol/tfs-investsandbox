@@ -1,4 +1,5 @@
-import { Currency } from '../../../../../../shared/models/currency.model';
+import { IncomeType, IncomeTypeEnum } from './../../../../../../shared/models/incomeType.model';
+import { Currency, CurrencyEnum } from '../../../../../../shared/models/currency.model';
 import { TopOfIncomeItem } from '../../../../../../shared/models/topOfIncome.model';
 import { Component, Input } from '@angular/core';
 
@@ -12,8 +13,12 @@ export class GeneralStatListContentComponent {
   item!: TopOfIncomeItem;
 
   @Input()
-  incomeType: 'percent' | 'absolute' = 'percent';
+  incomeType: IncomeType = IncomeTypeEnum.PERCENT;
 
   @Input()
-  currency: Currency = 'RUB';
+  currency: Currency = CurrencyEnum.RUB;
+
+  readonly currencies = CurrencyEnum;
+
+  readonly incomeTypes = IncomeTypeEnum;
 }

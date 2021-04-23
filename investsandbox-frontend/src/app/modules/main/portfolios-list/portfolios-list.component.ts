@@ -1,6 +1,6 @@
-import { IBackendApi, IBackendApiToken } from './../../../../shared/interfaces/IBackendApi';
 import { Portfolio } from './../../../../shared/models/portfolio.model';
 import { Component, Inject } from '@angular/core';
+import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 
 @Component({
   selector: 'app-portfolios-list',
@@ -10,9 +10,9 @@ import { Component, Inject } from '@angular/core';
 
 export class PortfoliosListComponent {
   portfoliosAddFormOpened = false;
-  portfolios!: Portfolio[];
+  portfolios: Portfolio[] | null;
 
-  constructor(@Inject(IBackendApiToken) private backendService: IBackendApi) {
+  constructor(@Inject(IBackendToken) private backendService: IBackend) {
     this.portfolios = backendService.portfolios;
    }
 

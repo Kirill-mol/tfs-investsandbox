@@ -1,5 +1,5 @@
 import { TuiButtonModule } from '@taiga-ui/core';
-import { AuthFormModule } from './../../registration/auth-form/auth-form.module';
+import { AuthFormModule } from '../../auth/auth-form/auth-form.module';
 import { TuiAvatarModule, TuiIslandModule } from '@taiga-ui/kit';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

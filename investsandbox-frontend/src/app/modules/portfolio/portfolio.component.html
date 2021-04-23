@@ -1,4 +1,3 @@
-<h6>Портфолио отдельная страница</h6>
 <h2 class="tui-text_h2">{{portfolio.title}}</h2>
 <div class="flex-container">
   <tui-island>
@@ -21,12 +20,16 @@
       </div>
     </div>
   </tui-island>
-  <tui-island>
+  <tui-island *ngIf="portfolio.history.onMonth.length > 1 || portfolio.history.onAllTime.length > 1">
     <h3 class="tui-island__title">Объем портфеля</h3>
-    <h4 class="tui-island__paragraph">За последние 30 дней</h4>
-    <app-chart-drawer [data]="portfolio.history.onMonth"></app-chart-drawer>
-    <h4 class="tui-island__paragraph">За все время</h4>
-    <app-chart-drawer [range]="'all'" [data]="portfolio.history.onAllTime"></app-chart-drawer>
+    <div *ngIf="portfolio.history.onMonth.length > 1">
+      <h4 class="tui-island__paragraph">За последние 30 дней</h4>
+      <app-chart-drawer [data]="portfolio.history.onMonth"></app-chart-drawer>
+    </div>
+    <div *ngIf="portfolio.history.onAllTime.length > 1">
+      <h4 class="tui-island__paragraph">За все время</h4>
+      <app-chart-drawer [range]="ranges.ALL" [data]="portfolio.history.onAllTime"></app-chart-drawer>
+    </div>
   </tui-island>
   <app-portfolio-quotes [quotes]="portfolio.quotes"></app-portfolio-quotes>
 </div>

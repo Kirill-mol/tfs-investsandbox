@@ -2,16 +2,16 @@
 <tui-island>
     <div class="flex-container">
         <div class="flex-container__login">
-            <tui-avatar [autoColor]="true" size="l" [text]="account.nickname"></tui-avatar>
+            <tui-avatar [autoColor]="true" size="l" [text]="account?.nickname || ''"></tui-avatar>
             <div class="flex-container__login__info">
-                <h2 class="tui-island__title no-margin">{{account.nickname}}</h2>
-                <h4 class="tui-island__paragraph no-margin">{{account.email}}</h4>
+                <h2 class="tui-island__title no-margin">{{account?.nickname}}</h2>
+                <h4 class="tui-island__paragraph no-margin">{{account?.email}}</h4>
             </div>
         </div>
         <div class="flex-container__buttons">
             <button tuiButton size="s" appearance="flat" (click)="turnEditForm()">Редактировать профиль</button>
-            <button tuiButton size="s" appearance="custom">Выйти из системы</button>
+            <button tuiButton size="s" appearance="custom" (click)="logout()">Выйти из системы</button>
         </div>
     </div>
-    <app-auth-form *ngIf="editFormOpened" type="edit" [nickname]="account.nickname" [email]="account.email"></app-auth-form>
+    <app-auth-form *ngIf="editFormOpened" type="edit" [nickname]="account?.nickname" [email]="account?.email"></app-auth-form>
 </tui-island>

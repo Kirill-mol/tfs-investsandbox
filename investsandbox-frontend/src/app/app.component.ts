@@ -1,6 +1,4 @@
-import { Account } from './../shared/models/account.model';
-import { IBackendApi, IBackendApiToken } from './../shared/interfaces/IBackendApi';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +7,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'InvestSandbox';
-  account: Account;
-
-  constructor(@Inject(IBackendApiToken) private backendService: IBackendApi) {
-    this.account = backendService.account;
-  }
 
   ngOnInit() {}
 }

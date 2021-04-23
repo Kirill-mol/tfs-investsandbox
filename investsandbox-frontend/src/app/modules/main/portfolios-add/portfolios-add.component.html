@@ -1,5 +1,5 @@
 <tui-island>
-  <form class="tui-form" [formGroup]="form">
+  <form (submit)="submitForm()" class="tui-form" [formGroup]="form">
     <div class="tui-form__row">
       <tui-group>
         <tui-input class="group-title" formControlName="title">
@@ -27,7 +27,7 @@
           <span>{{form.get('currency')?.value | tuiCurrency}}</span>
         </span>
       </div>
-      <button tuiButton class="tui-form__button" size="m" [disabled]="form.invalid">Создать!</button>
+      <button type="submit" tuiButton class="tui-form__button" size="m" [disabled]="form.invalid">Создать!</button>
     </div>
   </form>
 </tui-island>

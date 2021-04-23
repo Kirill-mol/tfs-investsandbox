@@ -1,5 +1,7 @@
+import { IAuth, IAuthToken } from './../../../../shared/interfaces/IAuth';
+import { NavigationService } from './../../../../shared/services/navigation.service';
 import { TuiOrientation } from '@taiga-ui/core';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -8,7 +10,10 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { AuthFormType } from 'src/shared/models/authType.model';
+import {
+  AuthFormType,
+  AuthFormTypeEnum,
+} from 'src/shared/models/authFormType.model';
 
 function passwordConfirmValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -33,27 +38,34 @@ function modifiedValidator(oldNickname: string, oldEmail: string): ValidatorFn {
 })
 export class AuthFormComponent implements OnInit {
   @Input()
-  type: AuthFormType = 'auth';
+  type: AuthFormType = 'login';
 
   @Input()
-  nickname!: string;
+  nickname: string | undefined;
 
   @Input()
-  email!: string;
+  email: string | undefined;
+
+  readonly authFormType = AuthFormTypeEnum;
 
   form!: FormGroup;
 
   verticalOrientation = TuiOrientation.Vertical;
 
+  constructor(
+    @Inject(IAuthToken) private authService: IAuth,
+    private navigationService: NavigationService
+  ) {}
+
   ngOnInit() {
     switch (this.type) {
-      case 'auth':
+      case AuthFormTypeEnum.LOGIN:
         this.form = new FormGroup({
           email: new FormControl(null, [Validators.required, Validators.email]),
           password: new FormControl(null, Validators.required),
         });
         break;
-      case 'edit':
+      case AuthFormTypeEnum.EDIT:
         this.form = new FormGroup(
           {
             nickname: new FormControl(this.nickname),
@@ -63,11 +75,11 @@ export class AuthFormComponent implements OnInit {
           },
           [
             passwordConfirmValidator(),
-            modifiedValidator(this.nickname, this.email),
+            modifiedValidator(this.nickname || '', this.email || ''),
           ]
         );
         break;
-      case 'registration':
+      case AuthFormTypeEnum.REGISTRATION:
         this.form = new FormGroup(
           {
             nickname: new FormControl(this.nickname, Validators.required),
@@ -80,6 +92,47 @@ export class AuthFormComponent implements OnInit {
           },
           [passwordConfirmValidator()]
         );
+        break;
+    }
+  }
+
+  private registration() {
+    this.authService
+      .registration(
+        this.form.get('nickname')?.value,
+        this.form.get('email')?.value,
+        this.form.get('password')?.value
+      )
+      .subscribe(
+        () => {
+          this.navigationService.toMain();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  private login() {
+    this.authService
+      .login(this.form.get('email')?.value, this.form.get('password')?.value)
+      .subscribe(
+        () => {
+          this.navigationService.toMain();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  submitForm() {
+    switch (this.type) {
+      case AuthFormTypeEnum.LOGIN:
+        this.login();
+        break;
+      case AuthFormTypeEnum.REGISTRATION:
+        this.registration();
         break;
     }
   }

@@ -1,3 +1,4 @@
+import { NavigationService } from './../../../../shared/services/navigation.service';
 import { Portfolio } from './../../../../shared/models/portfolio.model';
 import { Component, Input } from '@angular/core';
 
@@ -10,4 +11,10 @@ import { Component, Input } from '@angular/core';
 export class PortfoliosItemComponent {
   @Input()
   portfolio!: Portfolio;
+
+  constructor(private navigator: NavigationService) {}
+
+  toPortfolio() {
+    this.navigator.toPortfolio(this.portfolio.title);
+  }
 }

@@ -7,14 +7,18 @@ import { Account } from '../models/account.model';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService implements IBackend {
-  private _account: Account | null = null;
+  private _account: Account = {
+    email: '',
+    nickname: '',
+    portfolios: []
+  };
 
   get account() {
     return this._account;
   }
 
   get portfolios() {
-    return this._account?.portfolios ? this._account.portfolios : null;
+    return this._account.portfolios;
   }
 
   constructor(

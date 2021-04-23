@@ -1,5 +1,5 @@
 import { Portfolio } from './../../../../shared/models/portfolio.model';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 
 @Component({
@@ -9,12 +9,10 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 })
 
 export class PortfoliosListComponent {
-  portfoliosAddFormOpened = false;
-  portfolios: Portfolio[] | null;
+  @Input()
+  portfolios!: Portfolio[];
 
-  constructor(@Inject(IBackendToken) private backendService: IBackend) {
-    this.portfolios = backendService.portfolios;
-   }
+  portfoliosAddFormOpened = false;
 
   turnAddPortfolioForm() {
     this.portfoliosAddFormOpened = !this.portfoliosAddFormOpened;

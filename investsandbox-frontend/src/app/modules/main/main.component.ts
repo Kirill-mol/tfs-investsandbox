@@ -1,7 +1,7 @@
-import { NavigationService } from './../../../shared/services/navigation.service';
+import { Account } from './../../../shared/models/account.model';
 import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 import { UpdaterService } from './../../../shared/services/updater.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-main',
@@ -9,6 +9,9 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['main.component.less'],
 })
 export class MainComponent implements OnInit {
+  @Output()
+  account: Account = this.backendService.account;
+
   constructor(
     private updater: UpdaterService,
     @Inject(IBackendToken) private backendService: IBackend
@@ -17,6 +20,7 @@ export class MainComponent implements OnInit {
   ngOnInit() {
     this.backendService.getAccount().subscribe(
       () => {
+        this.account = this.backendService.account;
         this.updater.update();
       },
       (error) => {

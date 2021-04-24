@@ -1,7 +1,6 @@
 package ru.mololkin.investingsandbox.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,7 +43,7 @@ public class JwtTokenFilter extends GenericFilterBean {
                     SecurityContextHolder.getContext().setAuthentication(authentication); // Передаем аутентификатор
                 }
             }
-        } catch (JwtAuthException e) {
+        } catch (Exception e) {
             if (!response.isCommitted()) {
                 SecurityContextHolder.clearContext();
                 response.resetBuffer();

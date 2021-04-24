@@ -2,14 +2,13 @@ package ru.mololkin.investingsandbox.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import ru.mololkin.investingsandbox.entities.Role;
-import ru.mololkin.investingsandbox.properties.JwtProperties;
+import ru.mololkin.investingsandbox.entitiy.Role;
+import ru.mololkin.investingsandbox.propertiy.JwtProperties;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

@@ -3,9 +3,8 @@ package ru.mololkin.investingsandbox.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.mololkin.investingsandbox.dto.NewStockPortfolioDto;
 import ru.mololkin.investingsandbox.dto.UpdateUserDto;
-import ru.mololkin.investingsandbox.entities.Currency;
-import ru.mololkin.investingsandbox.entities.StockPortfolioEntity;
-import ru.mololkin.investingsandbox.entities.UserEntity;
+import ru.mololkin.investingsandbox.entitiy.StockPortfolioEntity;
+import ru.mololkin.investingsandbox.entitiy.UserEntity;
 
 import java.util.List;
 
@@ -26,5 +25,5 @@ public interface UserService extends UserDetailsService {
 
     UserEntity updateUser(UserEntity user, UpdateUserDto updateUserDto);
 
-    boolean deletePortfolio(UserEntity user, String portfolioName);
+    void deletePortfolio(UserEntity user, String portfolioName);
 }

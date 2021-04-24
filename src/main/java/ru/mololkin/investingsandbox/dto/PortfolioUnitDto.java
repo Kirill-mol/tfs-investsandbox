@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.mololkin.investingsandbox.entities.Currency;
-import ru.mololkin.investingsandbox.entities.PortfolioUnitEntity;
+import ru.mololkin.investingsandbox.entitiy.Currency;
 
 @Data
 @Builder

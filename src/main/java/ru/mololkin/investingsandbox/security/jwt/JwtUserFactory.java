@@ -3,8 +3,8 @@ package ru.mololkin.investingsandbox.security.jwt;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import ru.mololkin.investingsandbox.entities.Role;
-import ru.mololkin.investingsandbox.entities.UserEntity;
+import ru.mololkin.investingsandbox.entitiy.Role;
+import ru.mololkin.investingsandbox.entitiy.UserEntity;
 
 import java.util.List;
 import java.util.Set;

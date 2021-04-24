@@ -1,10 +1,12 @@
+import { AddYahooHeadersInterceptor } from './../shared/interceptors/AddYahooHeaders.interceptor copy';
+import { YahooApiService } from './../shared/services/yahooApi.service';
+import { AddMboumHeadersInterceptor } from '../shared/interceptors/AddMboumHeaders.interceptor';
 import { YahooService } from './../shared/services/yahoo.service';
 import { AddTokenInterceptor } from './../shared/interceptors/AddToken.interceptor';
 import { AuthService } from './../shared/services/auth.service';
 import { IAuthToken } from './../shared/interfaces/IAuth';
 import { BackendService } from './../shared/services/backend.service';
 import { BackendApiService } from './../shared/services/backendApi.service';
-import { YahooApiMockService } from './../shared/services/yahooApiMock.service';
 import { IYahooApiToken } from './../shared/interfaces/IYahooApi';
 import { StatisticService } from './../shared/services/statistic.service';
 import { IStatisticToken } from './../shared/interfaces/IStatistic';
@@ -62,7 +64,7 @@ import { IYahooToken } from 'src/shared/interfaces/IYahoo';
     },
     {
       provide: IYahooApiToken,
-      useClass: YahooApiMockService
+      useClass: YahooApiService
     },
     {
       provide: IAuthToken,
@@ -71,6 +73,16 @@ import { IYahooToken } from 'src/shared/interfaces/IYahoo';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddTokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddMboumHeadersInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddYahooHeadersInterceptor,
       multi: true
     }
   ],

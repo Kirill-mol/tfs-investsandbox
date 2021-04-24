@@ -1,6 +1,8 @@
-export type Exchange = "NMS" | "MCX";
+export type Exchange = 'NMS' | 'MCX' | 'NYQ' | 'CCY';
 
 export enum ExchangeEnum {
   NMS = 'NMS',
-  MCX = 'MCX'
+  MCX = 'MCX',
+  NYQ = 'NYQ',
+  CCY = 'CCY'
 }

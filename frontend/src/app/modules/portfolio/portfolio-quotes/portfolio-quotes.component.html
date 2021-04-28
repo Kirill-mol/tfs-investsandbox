@@ -1,0 +1,58 @@
+<h3 class="tui-text_h3">Состав портфеля</h3>
+<div class="quotes-list">
+  <app-quotes-buy [portfolio]="portfolio"></app-quotes-buy>
+  <tui-island *ngFor="let quote of quotes">
+    <h4 class="tui-island__title quotes-list__quote__shortname">
+      {{ quote.shortname }}
+    </h4>
+    <div class="quotes-list__quote">
+      <div>
+        <div class="tui-island__category">Тип</div>
+        <div [ngSwitch]="quote.quoteType">
+          <div class="tui-text_body-m" *ngSwitchCase="quoteType.CURRENCY">
+            Валюта
+          </div>
+          <div class="tui-text_body-m" *ngSwitchCase="quoteType.EQUITY">Акция</div>
+          <div class="tui-text_body-m" *ngSwitchCase="quoteType.ETF">Фонд</div>
+        </div>
+      </div>
+      <div>
+        <div class="tui-island__category">Аббревиатура</div>
+        <div class="tui-text_body-m">{{ quote.symbol }}</div>
+      </div>
+      <div>
+        <div class="tui-island__category">Биржа</div>
+        <div class="tui-text_body-m">{{ quote.exchange }}</div>
+      </div>
+      <div>
+        <div class="tui-island__category">Количество</div>
+        <div class="tui-text_body-m">
+          {{ quote.quantity | tuiFormatNumber }} шт.
+        </div>
+      </div>
+      <div>
+        <div class="tui-island__category">Стоимость акции</div>
+        <tui-money
+          [currency]="quote.currency"
+          [value]="quote.price"
+          class="tui-text_body-m"
+        ></tui-money>
+      </div>
+      <div>
+        <div class="tui-island__category">Общая стоимость</div>
+        <tui-money
+          [currency]="quote.currency"
+          [value]="quote.price * quote.quantity"
+          class="tui-text_body-m"
+        ></tui-money>
+      </div>
+      <div>
+        <app-chart-drawer
+          [size]="chartSizes.SMALL"
+          [data]="quote.history.length ? quote.history : [0, 0]"
+        ></app-chart-drawer>
+      </div>
+    </div>
+    <app-quotes-sell [quote]="quote" [portfolioTitle]="portfolio.title"></app-quotes-sell>
+  </tui-island>
+</div>

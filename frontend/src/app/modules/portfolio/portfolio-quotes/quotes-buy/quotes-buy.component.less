@@ -1,0 +1,41 @@
+.quote-content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+
+  &__shortname {
+    > * {
+      width: 350px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__exchange {
+    > * {
+      width: 80px;
+    }
+  }
+
+  &__price {
+    width: 120px;
+  }
+}
+
+.form {
+  &__quote-count {
+    max-width: 150px;
+  }
+
+  &__row-submit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__info {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

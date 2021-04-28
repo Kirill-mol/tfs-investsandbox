@@ -1,0 +1,35 @@
+<tui-axes
+  *ngIf="size === chartSize.BIG"
+  class="axes-big"
+  [axisXLabels]="getDates()"
+  [axisYLabels]="getYLabels()"
+  [horizontalLines]="horizontalLinesCount"
+  [verticalLines]="data.length"
+>
+  <tui-line-chart
+    [filled]="true"
+    [x]="0"
+    [y]="getMinOfData()"
+    [height]="(getMaxOfData() - getMinOfData()) * 1.05"
+    [width]="data.length"
+    [dots]="true"
+    [value]="getMapData()"
+  ></tui-line-chart>
+</tui-axes>
+<tui-axes
+  *ngIf="size === chartSize.SMALL"
+  class="axes-small"
+  [axisYLabels]="getYLabels()"
+  [horizontalLines]="horizontalLinesCount"
+  [axisXLabels]="[]"
+  [verticalLines]="data.length"
+>
+  <tui-line-chart
+    [filled]="true"
+    [x]="0"
+    [y]="getMinOfData()"
+    [height]="(getMaxOfData() - getMinOfData()) * 1.05"
+    [width]="data.length"
+    [value]="getMapData()"
+  ></tui-line-chart>
+</tui-axes>

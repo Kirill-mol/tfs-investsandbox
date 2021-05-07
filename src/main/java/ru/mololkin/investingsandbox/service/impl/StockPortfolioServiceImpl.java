@@ -1,12 +1,10 @@
 package ru.mololkin.investingsandbox.service.impl;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.mololkin.investingsandbox.dto.SellPortfolioUnitDto;
-import ru.mololkin.investingsandbox.dto.UpdatePortfolioDto;
 import ru.mololkin.investingsandbox.entitiy.PortfolioUnitEntity;
 import ru.mololkin.investingsandbox.entitiy.StockPortfolioEntity;
 import ru.mololkin.investingsandbox.entitiy.UserEntity;
@@ -79,9 +77,7 @@ public class StockPortfolioServiceImpl implements StockPortfolioService {
 				+ currencyExchanger.exchange(portfolioUnit.getCurrency(), stockPortfolio.getCurrency(),
 				sellPortfolioUnitDto.getQuantity() * sellPortfolioUnitDto.getPrice()));
 
-		StockPortfolioEntity saved = stockPortfolioRepository.save(stockPortfolio);
-
-		return null;
+		return stockPortfolioRepository.save(stockPortfolio);
 	}
 
 	@Override

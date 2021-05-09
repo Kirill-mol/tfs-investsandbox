@@ -31,6 +31,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @NotNull
     @Column(name = "nickname")
     private String nickname;
 

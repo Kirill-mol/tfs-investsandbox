@@ -9,6 +9,10 @@ export class NavigationService {
     private router: Router
   ) {}
 
+  toLanding() {
+    this.router.navigate(['/']);
+  }
+
   toLogin() {
     this.router.navigate(['/login']);
   }

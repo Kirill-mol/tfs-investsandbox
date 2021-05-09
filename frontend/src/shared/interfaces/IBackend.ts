@@ -16,6 +16,8 @@ export interface IBackend {
   
   changeDetector: EventEmitter<void>;
 
+  getAccount(): Observable<Account>;
+
   initFromMain(): void;
 
   initFromPortfolio(portfolioTitle: string): void;

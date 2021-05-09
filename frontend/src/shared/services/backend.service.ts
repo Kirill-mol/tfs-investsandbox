@@ -5,7 +5,14 @@ import { IStockMarket } from './../interfaces/IStockMarket';
 import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
 import { Portfolio } from './../models/portfolio.model';
 import { Currency } from './../models/currency.model';
-import { catchError, map, tap, switchMap, mergeMap, filter } from 'rxjs/operators';
+import {
+  catchError,
+  map,
+  tap,
+  switchMap,
+  mergeMap,
+  filter,
+} from 'rxjs/operators';
 import { IBackendApi, IBackendApiToken } from './../interfaces/IBackendApi';
 import { IBackend } from './../interfaces/IBackend';
 import { EventEmitter, Inject, Injectable } from '@angular/core';
@@ -102,21 +109,25 @@ export class BackendService implements IBackend {
       });
   }
 
+  getAccount() {
+    return this.backendApiService.getAccount().pipe(
+      map((account) => {
+        account.portfolios = account.portfolios.map((portfolio) =>
+          this.parsePortfolio(portfolio)
+        );
+        return account;
+      }),
+      tap((account) => {
+        this._account = account;
+      })
+    );
+  }
+
   initFromMain() {
     const quotes: { [symbol: string]: number } = {};
 
-    this.backendApiService
-      .getAccount()
+    this.getAccount()
       .pipe(
-        map((account) => {
-          account.portfolios = account.portfolios.map((portfolio) =>
-            this.parsePortfolio(portfolio)
-          );
-          return account;
-        }),
-        tap((account) => {
-          this._account = account;
-        }),
         map((account) =>
           account.portfolios.map((portfolio) => portfolio.quotes)
         ),
@@ -174,7 +185,6 @@ export class BackendService implements IBackend {
           this.changeDetector.emit();
         },
         (error) => {
-          console.log(error);
           throw new Error(error);
         }
       );
@@ -182,17 +192,10 @@ export class BackendService implements IBackend {
 
   initFromPortfolio(portfolioTitle: string) {
     let portfolioId: number;
-    this.backendApiService
-      .getAccount()
+
+    this.getAccount()
       .pipe(
-        map((account) => {
-          account.portfolios = account.portfolios.map((portfolio) =>
-            this.parsePortfolio(portfolio)
-          );
-          return account;
-        }),
-        tap((account) => {
-          this._account = account;
+        tap(() => {
           portfolioId = this.getPortfolioIdByTitle(portfolioTitle);
         }),
         map((account) =>
@@ -245,7 +248,6 @@ export class BackendService implements IBackend {
           this.changeDetector.emit();
         },
         (error) => {
-          console.log(error);
           throw new Error(error);
         }
       );
@@ -311,11 +313,14 @@ export class BackendService implements IBackend {
 
   sellQuote(portfolioTitle: string, quote: Quote, count: number) {
     console.log(portfolioTitle);
-    this.backendApiService.sellQuote(portfolioTitle, quote, count).subscribe((x) => {
-      console.log(x);
-      this.changeDetector.emit();
-    }, (error) => {
-      throw new Error(error);
-    })
+    this.backendApiService.sellQuote(portfolioTitle, quote, count).subscribe(
+      (x) => {
+        console.log(x);
+        this.changeDetector.emit();
+      },
+      (error) => {
+        throw new Error(error);
+      }
+    );
   }
 }

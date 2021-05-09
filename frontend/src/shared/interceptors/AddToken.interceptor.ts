@@ -1,5 +1,4 @@
 import { UrlEnum } from './../models/url.model';
-import { NavigationService } from './../services/navigation.service';
 import { IAuth, IAuthToken } from './../interfaces/IAuth';
 import { Inject, Injectable } from '@angular/core';
 import {
@@ -13,8 +12,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AddTokenInterceptor implements HttpInterceptor {
   constructor(
-    @Inject(IAuthToken) private authService: IAuth,
-    private navigationService: NavigationService
+    @Inject(IAuthToken) private authService: IAuth
   ) {}
 
   intercept(
@@ -29,7 +27,6 @@ export class AddTokenInterceptor implements HttpInterceptor {
 
         return next.handle(authReq);
       }
-      this.navigationService.toLogin();
     }
     return next.handle(req);
   }

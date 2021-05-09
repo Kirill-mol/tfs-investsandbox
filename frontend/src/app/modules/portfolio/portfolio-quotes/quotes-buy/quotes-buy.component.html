@@ -1,0 +1,65 @@
+<tui-island>
+  <form class="tui-form" *tuiLet="items$ | async as items" [formGroup]="form" (submit)="buyQuote()">
+    <h3 class="tui-island__title">Купить ценные бумаги</h3>
+    <tui-group class="tui-form__row">
+      <tui-combo-box
+        formControlName="quote"
+        [valueContent]="quoteSymbol"
+        (searchChange)="onSearchChange($event)"
+        [stringify]="stringifyQuote()"
+      >
+        Название акции, валюты, фонда или ее сокращение (Tesla или TSLA)
+        <tui-data-list-wrapper
+          *tuiDataList
+          [items]="items"
+          [itemContent]="quoteContent"
+        >
+        </tui-data-list-wrapper>
+      </tui-combo-box>
+      <tui-input-number class="form__quote-count" formControlName="count">
+        Количество
+      </tui-input-number>
+    </tui-group>
+    <div class="tui-form__row form__row-submit">
+      <div>
+        <div class="form__row-submit__info" *ngIf="form.valid">
+          <div>
+            <h4 class="tui-island__category">Название акции</h4>
+            <div>{{quote?.value.shortname}}</div>
+          </div>
+          <div>
+            <h4 class="tui-island__category">Общая стоимость покупки</h4>
+            <tui-money [currency]="quote?.value.currency" [value]="count?.value * quote?.value.price"></tui-money>
+          </div>
+          <div>
+            <h4 class="tui-island__category">Общая стоимость покупки в валюте портфеля</h4>
+            <tui-money [currency]="portfolio.currency" [value]="count?.value * quote?.value.price | convertCurrency : quote?.value.currency : portfolio.currency"></tui-money>
+          </div>
+        </div>
+      </div>
+      <button tuiButton [disabled]="form.invalid" type="submit" size="m">Купить</button>
+    </div>
+  </form>
+</tui-island>
+
+<ng-template #quoteContent let-data>
+  <div class="quote-content">
+    <div class="quote-content__shortname">
+      <div class="tui-text_h6">{{ data.shortname }}</div>
+      <div class="tui-text_body-m">{{ data.symbol }}</div>
+    </div>
+    <div class="quote-content__exchange">
+      <div class="tui-text_body-m">{{data.exchange}}</div>
+    </div>
+    <div class="quote-content__price">
+      <tui-money [currency]="data.currency" [value]="data.price"></tui-money>
+    </div>
+    <div>
+      <app-chart-drawer [data]="data.history" size="small"></app-chart-drawer>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #quoteSymbol let-data>
+  {{ data.shortname }} ({{data.symbol}})
+</ng-template>

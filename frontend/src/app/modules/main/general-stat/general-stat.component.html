@@ -1,0 +1,26 @@
+<h2 class="tui-text_h3">Топ выигрышных стратегий</h2>
+<div class="flex-container">
+  <tui-island size="l">
+    <h3 class="tui-island__title">По приросту доходности</h3>
+    <form [formGroup]="formTimeRange" class="form-currency">
+      <tui-group [collapsed]="true">
+        <tui-radio-block formControlName="range" item="month" [hideRadio]="true" size="s">За последние 30 дней</tui-radio-block>
+        <tui-radio-block formControlName="range" item="all" [hideRadio]="true" size="s">За все время</tui-radio-block>
+      </tui-group>
+    </form>
+    <app-general-stat-list [top]="range?.value === 'month' ? topOfIncomes?.percent?.onMonth : topOfIncomes?.percent?.onAllTime"></app-general-stat-list>
+  </tui-island>
+  <tui-island size="l">
+    <h3 class="tui-island__title">По абсолютному доходу</h3>
+    <form [formGroup]="formCurrency" class="form-currency">
+      <tui-group [collapsed]="true">
+        <tui-radio-block formControlName="currency" item="RUB" [hideRadio]="true" size="s">В рублях</tui-radio-block>
+        <tui-radio-block formControlName="currency" item="USD" [hideRadio]="true" size="s">В долларах</tui-radio-block>
+        <tui-radio-block formControlName="currency" item="EUR" [hideRadio]="true" size="s">В евро</tui-radio-block>
+      </tui-group>
+    </form>
+    <app-general-stat-list [top]="topOfIncomes?.absolute" [incomeType]="incomeTypes.ABSOLUTE" [currency]="formCurrency.get('currency')?.value"></app-general-stat-list>
+  </tui-island>
+</div>
+
+

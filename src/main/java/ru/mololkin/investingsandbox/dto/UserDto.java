@@ -23,9 +23,7 @@ public class UserDto {
     private String password;
     @NotNull
     private String nickname;
-    @NotNull
     private Set<Role> roles;
-    @NotNull
     private List<StockPortfolioDto> portfolios;
 }
 

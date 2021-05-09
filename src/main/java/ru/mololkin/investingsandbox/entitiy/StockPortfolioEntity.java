@@ -6,8 +6,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Stock portfolio entity. Each user can have many portfolio.
@@ -52,11 +53,11 @@ public class StockPortfolioEntity extends BaseEntity {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection(targetClass = Double.class)
 	@CollectionTable(name = "month_history", joinColumns = @JoinColumn(name = "stock_portfolio_id"))
-	private List<Double> monthHistory = new ArrayList<>();
+	private Map<Integer, Double> monthHistory = new HashMap<>();
 
 	@Builder.Default
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection(targetClass = Double.class)
 	@CollectionTable(name = "all_time_history", joinColumns = @JoinColumn(name = "stock_portfolio_id"))
-	private List<Double> allTimeHistory = new ArrayList<>();
+	private Map<Integer, Double> allTimeHistory = new HashMap<>();
 }

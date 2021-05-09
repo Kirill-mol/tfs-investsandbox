@@ -3,15 +3,12 @@ package ru.mololkin.investingsandbox.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mololkin.investingsandbox.dto.*;
 import ru.mololkin.investingsandbox.entitiy.PortfolioUnitEntity;
 import ru.mololkin.investingsandbox.entitiy.StockPortfolioEntity;
 import ru.mololkin.investingsandbox.entitiy.UserEntity;
-import ru.mololkin.investingsandbox.exception.UserErrorException;
-import ru.mololkin.investingsandbox.exception.dto.BaseExceptionResponseDto;
 import ru.mololkin.investingsandbox.mapper.PortfolioUnitMapper;
 import ru.mololkin.investingsandbox.mapper.StockPortfolioMapper;
 import ru.mololkin.investingsandbox.repository.StockPortfolioRepository;
@@ -42,9 +39,6 @@ public class PortfolioController {
 			@Valid @RequestBody NewStockPortfolioDto newStockPortfolio
 	) {
 		String email = tokenProvider.getEmail(token);
-
-		//System.out.println(newStockPortfolio.getBalance());
-		//newStockPortfolio.setBalance(1000.0);
 		StockPortfolioEntity stockPortfolio = userService.addPortfolio(email, newStockPortfolio);
 		return ResponseEntity.ok(stockPortfolioMapper.map(stockPortfolio));
 

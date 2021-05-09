@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -19,6 +20,6 @@ public class StockPortfolioDto {
     private Double initBalance;
     private String currency;
     private List<PortfolioUnitDto> quotes;
-    private List<Double> monthHistory;
-    private List<Double> allTimeHistory;
+    private Map<Integer, Double> monthHistory;
+    private Map<Integer, Double> allTimeHistory;
 }

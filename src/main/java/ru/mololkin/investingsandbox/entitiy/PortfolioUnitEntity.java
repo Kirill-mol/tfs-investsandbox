@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "protfolio_unit")
+@Table(name = "portfolio_unit")
 @EqualsAndHashCode(callSuper = true)
 public class PortfolioUnitEntity extends BaseEntity{
 
@@ -43,6 +43,10 @@ public class PortfolioUnitEntity extends BaseEntity{
     @NotNull
     @Column(name = "price")
     private Double price;
+
+    @NotNull
+    @Column(name = "quote_type")
+    private String quoteType;
 
     @ManyToOne
     private StockPortfolioEntity stockPortfolio;

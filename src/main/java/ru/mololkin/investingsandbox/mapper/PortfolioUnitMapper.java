@@ -15,6 +15,7 @@ public class PortfolioUnitMapper {
 				.exchange(portfolioUnitEntity.getExchange())
 				.currency(portfolioUnitEntity.getCurrency())
 				.quantity(portfolioUnitEntity.getQuantity())
+				.quoteType(portfolioUnitEntity.getQuoteType())
 				.build();
 	}
 
@@ -27,6 +28,7 @@ public class PortfolioUnitMapper {
 				.currency(newPortfolioUnit.getCurrency())
 				.quantity(newPortfolioUnit.getQuantity())
 				.price(newPortfolioUnit.getPrice())
+				.quoteType(newPortfolioUnit.getQuoteType())
 				.build();
 	}
 }

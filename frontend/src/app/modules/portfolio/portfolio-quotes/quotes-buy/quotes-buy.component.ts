@@ -13,7 +13,7 @@ import {
   Input,
   OnDestroy,
 } from '@angular/core';
-import { interval, Observable, Subject, Subscription } from 'rxjs';
+import { interval, Observable, of, Subject, Subscription } from 'rxjs';
 import {
   filter,
   startWith,
@@ -46,9 +46,8 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
     switchMap((searchLowerCase) =>
       this.stockMarketService.searchQuotes(searchLowerCase, this.portfolio.currency)
     ),
-    catchError((error) => {
-      console.log(error);
-      return [];
+    catchError(() => {
+      return of([]);
     }),
     startWith([])
   );
@@ -106,7 +105,6 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
   }
 
   buyQuote() {
-    console.log(1);
     this.backendService.buyQuote(this.portfolio.title, {
       ...this.quote?.value,
       quantity: this.count?.value,

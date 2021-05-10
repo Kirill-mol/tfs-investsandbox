@@ -14,7 +14,7 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 })
 export class AccountComponent {
   @Input()
-  nickname!: string;
+  name!: string;
 
   @Input()
   email!: string;

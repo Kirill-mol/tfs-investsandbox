@@ -9,8 +9,8 @@
   <tui-line-chart
     [filled]="true"
     [x]="0"
-    [y]="getMinOfData()"
-    [height]="getMaxOfData() * 1.05 - getMinOfData()"
+    [y]="getMinOfData() * 0.95"
+    [height]="getMaxOfData() * 1.05 - getMinOfData() * 0.95"
     [width]="data.length"
     [dots]="true"
     [value]="getMapData()"
@@ -27,8 +27,8 @@
   <tui-line-chart
     [filled]="true"
     [x]="0"
-    [y]="getMinOfData()"
-    [height]="getMaxOfData() * 1.05 - getMinOfData()"
+    [y]="getMinOfData() * 0.95"
+    [height]="getMaxOfData() * 1.05 - getMinOfData() * 0.95"
     [width]="data.length"
     [value]="getMapData()"
   ></tui-line-chart>

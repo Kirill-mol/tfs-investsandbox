@@ -1,5 +1,5 @@
 import { NavigationService } from './../../../shared/services/navigation.service';
-import { ChangeTypeEnum } from './../../../shared/models/changeType.model';
+import { EventTypeEnum } from '../../../shared/models/eventType.model';
 import { IForex, IForexToken } from './../../../shared/interfaces/IForex';
 import { Subscription } from 'rxjs';
 import { Account } from './../../../shared/models/account.model';
@@ -13,6 +13,7 @@ import {
   ChangeDetectorRef,
   OnDestroy,
 } from '@angular/core';
+import { ErrorTypeEnum } from 'src/shared/models/errorType.model';
 
 @Component({
   selector: 'app-main',
@@ -21,25 +22,22 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainComponent implements OnInit, OnDestroy {
-  private backendChangeDetector!: Subscription;
-  private updating!: Subscription;
-  private forexSubscription!: Subscription;
+  private backendEventDetector!: Subscription;
+  private updaterEventDetector!: Subscription;
 
   account: Account = this.backendService.account;
 
   constructor(
     private updater: UpdaterService,
     @Inject(IBackendToken) private backendService: IBackend,
-    @Inject(IForexToken) private forex: IForex,
     private navigator: NavigationService,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.backendService.initFromMain();
-    this.forexSubscription = this.forex.updateForex().subscribe();
-    this.backendChangeDetector = this.backendService.changeDetector.subscribe((type) => {
-      if (type && type === ChangeTypeEnum.EMAIL_EDITED) {
+    this.backendEventDetector = this.backendService.eventDetector.subscribe((type) => {
+      if (type === EventTypeEnum.EMAIL_EDITED) {
         this.navigator.toLogin();
       } else {
         this.account = this.backendService.account;
@@ -47,15 +45,14 @@ export class MainComponent implements OnInit, OnDestroy {
         this.cd.markForCheck();
       }
     });
-    this.updating = this.updater.subj.subscribe(() => {
+    this.updaterEventDetector = this.updater.eventDetector.subscribe(() => {
       this.account = this.backendService.account;
     });
   }
 
   ngOnDestroy() {
-    this.backendChangeDetector.unsubscribe();
-    this.updating.unsubscribe();
-    this.forexSubscription.unsubscribe();
+    this.backendEventDetector.unsubscribe();
+    this.updaterEventDetector.unsubscribe();
     this.updater.cancelMainUpdater();
   }
 }

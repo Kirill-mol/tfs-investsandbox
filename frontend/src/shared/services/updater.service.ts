@@ -1,7 +1,7 @@
 import { Portfolio } from './../models/portfolio.model';
 import { IForex, IForexToken } from './../interfaces/IForex';
 import { ICalculate, ICalculateToken } from './../interfaces/ICalculate';
-import { switchMap, tap, mergeMap } from 'rxjs/operators';
+import { switchMap, tap, mergeMap, filter } from 'rxjs/operators';
 import { interval, Subscription, Subject } from 'rxjs';
 import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
 import { IStockMarket } from './../interfaces/IStockMarket';
@@ -16,7 +16,7 @@ export class UpdaterService {
 
   private _portfolioUpdater!: Subscription;
 
-  readonly subj = new Subject();
+  readonly eventDetector = new Subject();
 
   constructor(
     @Inject(IBackendToken) private backendService: IBackend,
@@ -44,10 +44,19 @@ export class UpdaterService {
     );
   }
 
-  startMainUpdater(ms = 10000) {
+  private validTime(): boolean {
+    const date = new Date();
+    const h = (date.getUTCHours() + 3) % 24;
+    const d = date.getUTCDay();
+
+    return (h >= 10 || h === 0) && d > 0 && d < 6;
+  }
+
+  startMainUpdater(ms = 5000) {
     this.cancelMainUpdater();
     this._mainUpdater = interval(ms)
       .pipe(
+        filter(() => this.validTime()),
         switchMap(() => this.forex.updateForex()),
         mergeMap(() =>
           this.stockMarketService.getQuotesBySymbols(
@@ -64,8 +73,7 @@ export class UpdaterService {
 
                 return {
                   ...quote,
-                  price: quote2.price,
-                  history: quote2.history,
+                  price: quote2.price
                 };
               }
             );
@@ -74,10 +82,9 @@ export class UpdaterService {
           this.statisticService.updateTopPortfoliosOfIncome(
             this.backendService.portfolios
           );
-          console.log(this.backendService.account.portfolios[0]);
         })
       )
-      .subscribe(this.subj);
+      .subscribe(this.eventDetector);
   }
 
   cancelMainUpdater() {
@@ -86,31 +93,29 @@ export class UpdaterService {
     }
   }
 
-  startPortfolioUpdater(portfolioId: number, ms = 10000) {
+  startPortfolioUpdater(portfolioId: number, ms = 5000) {
     this.cancelPortfolioUpdater();
     this._portfolioUpdater = interval(ms)
     .pipe(
+      filter(() => this.validTime()),
       switchMap(() => this.forex.updateForex()),
       mergeMap(() =>
         this.stockMarketService.getQuotesBySymbols(
           this.backendService.quotesSymbols
         )
       ),
-      mergeMap((quotes) => this.stockMarketService.getQuotesWithHistory(quotes)),
       tap((quotes) => {
         this.backendService.portfolios[portfolioId].quotes = this.backendService.portfolios[portfolioId].quotes.map((quote, index) => {
           quote = {
             ...quote,
             price: quotes[index].price,
-            history: quotes[index].history
           }
           return quote;
         })
         this.updatePortfolio(this.backendService.portfolios[portfolioId]);
-        console.log(this.backendService.account.portfolios[portfolioId]);
       })
     )
-    .subscribe(this.subj);
+    .subscribe(this.eventDetector);
   }
 
   cancelPortfolioUpdater() {

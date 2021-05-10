@@ -17,7 +17,7 @@
         </div>
       </div>
       <div>
-        <div class="tui-island__category">Аббревиатура</div>
+        <div class="tui-island__category">Тикер</div>
         <div class="tui-text_body-m">{{ quote.symbol }}</div>
       </div>
       <div>
@@ -45,8 +45,16 @@
           [value]="quote.price * quote.quantity"
           class="tui-text_body-m"
         ></tui-money>
+        <div *ngIf="quote.currency !== portfolio.currency">
+          <tui-money
+          [currency]="portfolio.currency"
+          [value]="quote.price * quote.quantity | convertCurrency : quote.currency : portfolio.currency"
+          class="tui-text_body-s"
+        ></tui-money>
+        </div>
       </div>
       <div>
+        <div class="tui-island__category">Годовой график</div>
         <app-chart-drawer
           [size]="chartSizes.SMALL"
           [data]="quote.history.length ? quote.history : [0, 0]"

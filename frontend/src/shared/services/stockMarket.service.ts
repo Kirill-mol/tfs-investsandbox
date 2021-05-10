@@ -138,7 +138,7 @@ export class StockMarketService implements IStockMarket {
       ).pipe(
         map((histories) =>
           quotes.map((quote, index) => {
-            quote.history = histories[index];
+            quote.history = histories[index].filter(num => num != null);
             return quote;
           })
         )

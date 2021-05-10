@@ -1,4 +1,6 @@
-import { ChangeType, ChangeTypeEnum } from './../models/changeType.model';
+import { IForex, IForexToken } from './../interfaces/IForex';
+import { ErrorType, ErrorTypeEnum } from './../models/errorType.model';
+import { EventType, EventTypeEnum } from '../models/eventType.model';
 import { IStatistic, IStatisticToken } from './../interfaces/IStatistic';
 import { RangeEnum } from './../models/range.model';
 import { ICalculate, ICalculateToken } from './../interfaces/ICalculate';
@@ -20,18 +22,19 @@ import { EventEmitter, Inject, Injectable } from '@angular/core';
 import { Account } from '../models/account.model';
 import { of } from 'rxjs';
 import { Quote } from '../models/quote.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService implements IBackend {
   private _account: Account = {
     email: '',
-    nickname: '',
+    name: '',
     portfolios: [],
   };
 
   private _quotesSymbols = new Set<string>();
 
-  readonly changeDetector = new EventEmitter<void | ChangeType>();
+  readonly eventDetector = new EventEmitter<void | EventType>();
 
   get account() {
     return this._account;
@@ -49,7 +52,8 @@ export class BackendService implements IBackend {
     @Inject(IBackendApiToken) private backendApiService: IBackendApi,
     @Inject(ICalculateToken) private calculator: ICalculate,
     @Inject(IStockMarketToken) private stockMarketService: IStockMarket,
-    @Inject(IStatisticToken) private statisticService: IStatistic
+    @Inject(IStatisticToken) private statisticService: IStatistic,
+    @Inject(IForexToken) private forex: IForex
   ) {}
 
   private parsePortfolio(portfolio: any): Portfolio {
@@ -83,19 +87,18 @@ export class BackendService implements IBackend {
     };
   }
 
-  editAccountInfo(nickname?: string, email?: string) {
-    this.backendApiService.editAccount(nickname, email).subscribe(
+  editAccountInfo(name?: string, email?: string) {
+    this.backendApiService.editAccount(name, email).subscribe(
       (account) => {
-        this._account.nickname = account.nickname;
+        const oldEmail = this._account.email;
+
+        this._account.name = account.name;
         this._account.email = account.email;
-        if (email) {
-          this.changeDetector.emit(ChangeTypeEnum.EMAIL_EDITED);
+        if (email && account.email !== oldEmail) {
+          this.eventDetector.emit(EventTypeEnum.EMAIL_EDITED);
         } else {
-          this.changeDetector.emit();
+          this.eventDetector.emit();
         }
-      },
-      (error) => {
-        throw new Error(error);
       }
     );
   }
@@ -103,15 +106,7 @@ export class BackendService implements IBackend {
   editAccountPassword(password: string) {
     this.backendApiService
       .editAccount(undefined, undefined, password)
-      .pipe(
-        map(() => null),
-        catchError((error) => of(`Ошибка: ${error}`))
-      )
-      .subscribe((error) => {
-        if (error) {
-          throw new Error(error);
-        }
-      });
+      .subscribe();
   }
 
   getAccount() {
@@ -144,7 +139,8 @@ export class BackendService implements IBackend {
         tap((symbols) => {
           this._quotesSymbols = new Set(symbols);
         }),
-        switchMap(() =>
+        switchMap(() => this.forex.updateForex()),
+        mergeMap(() =>
           this.stockMarketService.getQuotesBySymbols(this.quotesSymbols)
         ),
         map((quotes) => {
@@ -187,10 +183,7 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolios) => {
           this._account.portfolios = portfolios;
-          this.changeDetector.emit(ChangeTypeEnum.ACCOUNT_LOADED);
-        },
-        (error) => {
-          throw new Error(error);
+          this.eventDetector.emit(EventTypeEnum.ACCOUNT_LOADED);
         }
       );
   }
@@ -209,7 +202,8 @@ export class BackendService implements IBackend {
         tap((symbols) => {
           this._quotesSymbols = new Set(symbols);
         }),
-        switchMap(() =>
+        switchMap(() => this.forex.updateForex()),
+        mergeMap(() =>
           this.stockMarketService.getQuotesBySymbols(this.quotesSymbols)
         ),
         mergeMap((quotes) =>
@@ -250,10 +244,7 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolio) => {
           this._account.portfolios[portfolioId] = portfolio;
-          this.changeDetector.emit(ChangeTypeEnum.ACCOUNT_LOADED);
-        },
-        (error) => {
-          throw new Error(error);
+          this.eventDetector.emit(EventTypeEnum.ACCOUNT_LOADED);
         }
       );
   }
@@ -273,22 +264,19 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolio) => {
           this._account.portfolios.push(portfolio);
-          this.changeDetector.emit();
-        },
-        (error) => {
-          throw new Error(error);
+          this.eventDetector.emit();
         }
       );
   }
 
   deletePortfolio(title: string) {
-    this.backendApiService.deletePortfolio(title).subscribe(() => {
-      const pos = this.getPortfolioIdByTitle(title);
-      this._account.portfolios.splice(pos, 1);
-      this.changeDetector.emit(ChangeTypeEnum.PORTFOLIO_DELETED);
-    }, (error) => {
-      throw new Error(error);
-    })
+    this.backendApiService.deletePortfolio(title).subscribe(
+      () => {
+        const pos = this.getPortfolioIdByTitle(title);
+        this._account.portfolios.splice(pos, 1);
+        this.eventDetector.emit(EventTypeEnum.PORTFOLIO_DELETED);
+      }
+    );
   }
 
   buyQuote(portfolioTitle: string, quote: Quote) {
@@ -318,24 +306,39 @@ export class BackendService implements IBackend {
             }
           );
           this._quotesSymbols.add(quote.symbol);
-          this.changeDetector.emit();
-        },
-        (error) => {
-          throw new Error(error);
+          this.eventDetector.emit();
         }
       );
   }
 
   sellQuote(portfolioTitle: string, quote: Quote, count: number) {
-    console.log(portfolioTitle);
-    this.backendApiService.sellQuote(portfolioTitle, quote, count).subscribe(
-      (x) => {
-        console.log(x);
-        this.changeDetector.emit();
-      },
-      (error) => {
-        throw new Error(error);
-      }
-    );
+    this.backendApiService
+      .sellQuote(portfolioTitle, quote, count)
+      .pipe(map((portfolio) => this.parsePortfolio(portfolio)))
+      .subscribe(
+        (portfolio) => {
+          const id = this.getPortfolioIdByTitle(portfolioTitle);
+
+          this._account.portfolios[id].balance = portfolio.balance;
+          this._account.portfolios[id].quotes = portfolio.quotes.map(
+            (quote2) => {
+              if (quote2.symbol === quote.symbol) {
+                quote2.price = quote.price;
+                quote2.history = quote.history;
+              } else {
+                const portfolioQuote = this._account.portfolios[
+                  id
+                ].quotes.filter((quote) => quote.symbol === quote2.symbol)[0];
+                if (portfolioQuote) {
+                  quote2.price = portfolioQuote.price;
+                  quote2.history = portfolioQuote.history;
+                }
+              }
+              return quote2;
+            }
+          );
+          this.eventDetector.emit();
+        }
+      );
   }
 }

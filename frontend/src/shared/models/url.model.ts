@@ -1,5 +1,5 @@
 const host = 'http://localhost';
-const yahoo = 'https://query1.finance.yahoo.com/';
+const yahoo = 'https://query1.finance.yahoo.com';
 
 export const UrlEnum = {
   API: host,
@@ -10,6 +10,6 @@ export const UrlEnum = {
   API_QUOTE: `${host}/user/portfolio/quote`,
   YAHOO: yahoo,
   YAHOO_AUTOCOMPLETE: `${yahoo}/v1/finance/search`,
-  YAHOO_GET_QUOTE_INFO: `${yahoo}v10/finance/quoteSummary`,
+  YAHOO_GET_QUOTE_INFO: `${yahoo}/v10/finance/quoteSummary`,
   YAHOO_GET_QUOTE_HISTORY: `${yahoo}/v8/finance/chart`
 } as const;

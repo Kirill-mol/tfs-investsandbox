@@ -2,9 +2,9 @@
 <tui-island>
     <div class="flex-container">
         <div class="flex-container__login">
-            <tui-avatar [autoColor]="true" size="l" [text]="nickname"></tui-avatar>
+            <tui-avatar [autoColor]="true" size="l" [text]="name"></tui-avatar>
             <div class="flex-container__login__info">
-                <h2 class="tui-island__title no-margin">{{nickname}}</h2>
+                <h2 class="tui-island__title no-margin">{{name}}</h2>
                 <h4 class="tui-island__paragraph no-margin">{{email}}</h4>
             </div>
         </div>
@@ -14,6 +14,6 @@
             <button tuiButton size="s" appearance="custom" (click)="logout()">Выйти</button>
         </div>
     </div>
-    <app-auth-form *ngIf="editAccountFormOpened" [type]="authFormType.EDIT_ACCOUNT" [nickname]="nickname" [email]="email"></app-auth-form>
+    <app-auth-form *ngIf="editAccountFormOpened" [type]="authFormType.EDIT_ACCOUNT" [name]="name" [email]="email"></app-auth-form>
     <app-auth-form *ngIf="editPasswordFormOpened" [type]="authFormType.EDIT_PASSWORD"></app-auth-form>
 </tui-island>

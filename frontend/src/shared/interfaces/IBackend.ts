@@ -1,4 +1,5 @@
-import { ChangeType } from './../models/changeType.model';
+import { ErrorType } from './../models/errorType.model';
+import { EventType } from '../models/eventType.model';
 import { Observable } from 'rxjs';
 import { Portfolio } from './../models/portfolio.model';
 import { Account } from './../models/account.model';
@@ -15,7 +16,7 @@ export interface IBackend {
 
   quotesSymbols: string[];
   
-  changeDetector: EventEmitter<void | ChangeType>;
+  eventDetector: EventEmitter<void | EventType>;
 
   getAccount(): Observable<Account>;
 

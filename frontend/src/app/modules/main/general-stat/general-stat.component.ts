@@ -44,13 +44,13 @@ export class GeneralStatComponent {
   ) {}
 
   ngOnInit() {
-    this.backendChangeDetector = this.backendService.changeDetector.subscribe(
+    this.backendChangeDetector = this.backendService.eventDetector.subscribe(
       () => {
         this.topOfIncomes = this.statisticService.topPortfoliosOfIncome;
         this.cd.markForCheck();
       }
     );
-    this.updating = this.updater.subj.subscribe(() => {
+    this.updating = this.updater.eventDetector.subscribe(() => {
       this.topOfIncomes = this.statisticService.topPortfoliosOfIncome;
       this.cd.markForCheck();
     });

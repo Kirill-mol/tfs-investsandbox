@@ -1,6 +1,6 @@
-export type ChangeType = 'ACCOUNT_LOADED' | 'EMAIL_EDITED' | 'PORTFOLIO_DELETED';
+export type EventType = 'ACCOUNT_LOADED' | 'EMAIL_EDITED' | 'PORTFOLIO_DELETED';
 
-export enum ChangeTypeEnum {
+export enum EventTypeEnum {
   ACCOUNT_LOADED = 'ACCOUNT_LOADED',
   EMAIL_EDITED = 'EMAIL_EDITED',
   PORTFOLIO_DELETED = 'PORTFOLIO_DELETED'

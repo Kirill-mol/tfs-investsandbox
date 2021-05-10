@@ -33,7 +33,7 @@ export class AuthFormComponent implements OnInit {
   type: AuthFormType = 'login';
 
   @Input()
-  nickname!: string;
+  name!: string;
 
   @Input()
   email!: string;
@@ -61,7 +61,7 @@ export class AuthFormComponent implements OnInit {
       case AuthFormTypeEnum.EDIT_ACCOUNT:
         this.form = new FormGroup(
           {
-            nickname: new FormControl(this.nickname),
+            nickname: new FormControl(this.name),
             email: new FormControl(this.email, [Validators.email]),
           },
           [this.modifiedValidator()]
@@ -79,7 +79,7 @@ export class AuthFormComponent implements OnInit {
       case AuthFormTypeEnum.REGISTRATION:
         this.form = new FormGroup(
           {
-            nickname: new FormControl(this.nickname, Validators.required),
+            nickname: new FormControl(this.name, Validators.required),
             email: new FormControl(this.email, [
               Validators.email,
               Validators.required,
@@ -157,10 +157,10 @@ export class AuthFormComponent implements OnInit {
 
   private modifiedValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!this.nickname && !this.email) {
+      if (!this.name && !this.email) {
         return { empty: true };
       }
-      return this.nickname ===
+      return this.name ===
         this.deleteSpaces(control.get('nickname')?.value) &&
         this.email === this.deleteSpaces(control.get('email')?.value)
         ? { modified: false }

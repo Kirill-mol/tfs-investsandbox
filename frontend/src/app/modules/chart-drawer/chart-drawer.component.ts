@@ -56,12 +56,12 @@ export class ChartDrawerComponent implements OnInit {
 
   getYLabels(): string[] {
     const range =
-      (this.getMaxOfData() * 1.05 - this.getMinOfData()) /
-      (this.horizontalLinesCount - 1);
+      (this.getMaxOfData() * 1.05 - this.getMinOfData() * 0.95) /
+      (this.horizontalLinesCount);
     const labels: string[] = [];
 
-    for (let i = 0; i < this.horizontalLinesCount; i++) {
-      labels.push(Math.round(this.getMinOfData() + i * range).toString());
+    for (let i = 0; i <= this.horizontalLinesCount; i++) {
+      labels.push(Math.round(this.getMinOfData() * 0.95 + i * range).toString());
     }
 
     return labels;

@@ -38,10 +38,10 @@ export class PortfoliosItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.updating = this.updater.subj.subscribe(() => {
+    this.updating = this.updater.eventDetector.subscribe(() => {
       this.cd.markForCheck();
     });
-    this.backendChangeDetector = this.backendService.changeDetector.subscribe(() => {
+    this.backendChangeDetector = this.backendService.eventDetector.subscribe(() => {
       this.cd.markForCheck();
     })
   }

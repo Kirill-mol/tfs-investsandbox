@@ -10,11 +10,11 @@ export const IBackendApiToken = new InjectionToken('IBackendApi');
 export interface IBackendApi {
   login(email: string, password: string): Observable<{email: string, token: string, expiration: number}>;
 
-  registration(nickname: string, email: string, password: string): Observable<Account>;
+  registration(name: string, email: string, password: string): Observable<Account>;
 
   getAccount(): Observable<Account>;
 
-  editAccount(nickname?: string, email?: string, password?: string): Observable<Account>;
+  editAccount(name?: string, email?: string, password?: string): Observable<Account>;
 
   newPortfolio(title: string, balance: number, currency: Currency): Observable<any>;
 

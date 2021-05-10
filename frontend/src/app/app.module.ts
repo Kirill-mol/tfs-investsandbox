@@ -1,3 +1,4 @@
+import { InterceptErrorInterceptor } from './../shared/interceptors/InterceptError.interceptor';
 import { ForexService } from './../shared/services/forex.service';
 import { IForexToken } from './../shared/interfaces/IForex';
 import { CalculateService } from './../shared/services/calculate.service';
@@ -83,6 +84,11 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddTokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptErrorInterceptor,
       multi: true
     }
   ],

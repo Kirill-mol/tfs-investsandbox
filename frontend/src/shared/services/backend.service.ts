@@ -1,3 +1,4 @@
+import { ChangeType, ChangeTypeEnum } from './../models/changeType.model';
 import { IStatistic, IStatisticToken } from './../interfaces/IStatistic';
 import { RangeEnum } from './../models/range.model';
 import { ICalculate, ICalculateToken } from './../interfaces/ICalculate';
@@ -30,7 +31,7 @@ export class BackendService implements IBackend {
 
   private _quotesSymbols = new Set<string>();
 
-  readonly changeDetector = new EventEmitter<void>();
+  readonly changeDetector = new EventEmitter<void | ChangeType>();
 
   get account() {
     return this._account;
@@ -87,7 +88,11 @@ export class BackendService implements IBackend {
       (account) => {
         this._account.nickname = account.nickname;
         this._account.email = account.email;
-        this.changeDetector.emit();
+        if (email) {
+          this.changeDetector.emit(ChangeTypeEnum.EMAIL_EDITED);
+        } else {
+          this.changeDetector.emit();
+        }
       },
       (error) => {
         throw new Error(error);
@@ -182,7 +187,7 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolios) => {
           this._account.portfolios = portfolios;
-          this.changeDetector.emit();
+          this.changeDetector.emit(ChangeTypeEnum.ACCOUNT_LOADED);
         },
         (error) => {
           throw new Error(error);
@@ -245,7 +250,7 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolio) => {
           this._account.portfolios[portfolioId] = portfolio;
-          this.changeDetector.emit();
+          this.changeDetector.emit(ChangeTypeEnum.ACCOUNT_LOADED);
         },
         (error) => {
           throw new Error(error);
@@ -274,6 +279,16 @@ export class BackendService implements IBackend {
           throw new Error(error);
         }
       );
+  }
+
+  deletePortfolio(title: string) {
+    this.backendApiService.deletePortfolio(title).subscribe(() => {
+      const pos = this.getPortfolioIdByTitle(title);
+      this._account.portfolios.splice(pos, 1);
+      this.changeDetector.emit(ChangeTypeEnum.PORTFOLIO_DELETED);
+    }, (error) => {
+      throw new Error(error);
+    })
   }
 
   buyQuote(portfolioTitle: string, quote: Quote) {

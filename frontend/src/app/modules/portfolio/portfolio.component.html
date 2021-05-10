@@ -1,26 +1,30 @@
-<h2 class="tui-text_h2">{{portfolio?.title}}</h2>
-<div class="flex-container">
+<a tuiLink href="/main">&larr; Вернуться на главную</a>
+<div class="title">
+  <h2 class="tui-text_h2" [class.tui-skeleton]="!portfolioLoaded">{{portfolioLoaded && portfolio.title}}</h2>
+  <button tuiButton size="s" appearance="custom" *ngIf="portfolio" type="button" (click)="deletePortfolio()">Удалить</button>
+</div>
+<div class="info">
   <tui-island>
     <div class="feauters">
       <div>
         <h3 class="tui-island__category">Начальный капитал</h3>
-        <tui-money [value]="portfolio.initBalance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.initBalance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Свободный капитал</h3>
-        <tui-money [value]="portfolio.balance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.balance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Объем портфеля</h3>
-        <tui-money [value]="portfolio.realBalance || portfolio.balance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.realBalance || portfolio.balance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Абсолютный доход</h3>
-        <tui-money [colored]="true" [value]="portfolio.income?.absolute || 0" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [colored]="true" [value]="portfolio.income?.absolute || 0" [currency]="portfolio.currency"></tui-money>
       </div>
     </div>
   </tui-island>
-  <tui-island *ngIf="portfolio.history.onMonth.length > 1 || portfolio.history.onAllTime.length > 1">
+  <tui-island *ngIf="portfolio && (portfolio.history.onMonth.length > 1 || portfolio.history.onAllTime.length > 1)">
     <h3 class="tui-island__title">Объем портфеля</h3>
     <div *ngIf="portfolio.history.onMonth.length > 1">
       <h4 class="tui-island__paragraph">За последние 30 дней</h4>

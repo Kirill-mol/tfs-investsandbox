@@ -1,3 +1,5 @@
+import { NavigationService } from './../../../shared/services/navigation.service';
+import { ChangeTypeEnum } from './../../../shared/models/changeType.model';
 import { IForex, IForexToken } from './../../../shared/interfaces/IForex';
 import { Subscription } from 'rxjs';
 import { Account } from './../../../shared/models/account.model';
@@ -29,16 +31,21 @@ export class MainComponent implements OnInit, OnDestroy {
     private updater: UpdaterService,
     @Inject(IBackendToken) private backendService: IBackend,
     @Inject(IForexToken) private forex: IForex,
+    private navigator: NavigationService,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.backendService.initFromMain();
     this.forexSubscription = this.forex.updateForex().subscribe();
-    this.backendChangeDetector = this.backendService.changeDetector.subscribe(() => {
-      this.account = this.backendService.account;
-      this.updater.startMainUpdater();
-      this.cd.markForCheck();
+    this.backendChangeDetector = this.backendService.changeDetector.subscribe((type) => {
+      if (type && type === ChangeTypeEnum.EMAIL_EDITED) {
+        this.navigator.toLogin();
+      } else {
+        this.account = this.backendService.account;
+        this.updater.startMainUpdater();
+        this.cd.markForCheck();
+      }
     });
     this.updating = this.updater.subj.subscribe(() => {
       this.account = this.backendService.account;

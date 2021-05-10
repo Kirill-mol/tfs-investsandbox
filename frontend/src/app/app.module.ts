@@ -2,9 +2,7 @@ import { ForexService } from './../shared/services/forex.service';
 import { IForexToken } from './../shared/interfaces/IForex';
 import { CalculateService } from './../shared/services/calculate.service';
 import { ICalculateToken } from './../shared/interfaces/ICalculate';
-import { AddYahooHeadersInterceptor } from './../shared/interceptors/AddYahooHeaders.interceptor copy';
 import { StockMarketApiService } from '../shared/services/stockMarketApi.service';
-import { AddMboumHeadersInterceptor } from '../shared/interceptors/AddMboumHeaders.interceptor';
 import { StockMarketService } from '../shared/services/stockMarket.service';
 import { AddTokenInterceptor } from './../shared/interceptors/AddToken.interceptor';
 import { AuthService } from './../shared/services/auth.service';
@@ -85,16 +83,6 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddTokenInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AddMboumHeadersInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AddYahooHeadersInterceptor,
       multi: true
     }
   ],

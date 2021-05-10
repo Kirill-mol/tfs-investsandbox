@@ -1,3 +1,4 @@
+import { Translit } from './../models/translit.model';
 import { Currency, CurrencyEnum } from './../models/currency.model';
 import { StorageService } from './storage.service';
 import { QuoteTypeEnum } from '../models/quoteType.model';
@@ -9,7 +10,7 @@ import {
 import { IStockMarket } from '../interfaces/IStockMarket';
 import { Inject, Injectable } from '@angular/core';
 import { Quote } from '../models/quote.model';
-import { map, switchMap, filter, tap, mergeMap } from 'rxjs/operators';
+import { map, switchMap, filter, tap, mergeMap, concatMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -20,11 +21,11 @@ export class StockMarketService implements IStockMarket {
     private storage: StorageService
   ) {}
 
-  private checkQuote(quote: any, portfolioCurrency: Currency) {
+  private validQuote(quote: any, portfolioCurrency: Currency) {
     const exchange = quote.exchange;
     const type = quote.quoteType;
     const symbol: string = quote.symbol;
-    console.log(symbol.slice(3, 6));
+
     if (
       type === QuoteTypeEnum.CURRENCY &&
       symbol.slice(3, 6) !== portfolioCurrency
@@ -50,22 +51,10 @@ export class StockMarketService implements IStockMarket {
       quoteType: quote.quoteType,
       symbol: quote.symbol,
       currency: quote.currency,
-      price: quote.regularMarketPrice,
+      price: quote.regularMarketPrice.raw,
       quantity: 0,
       history: [],
     };
-  }
-
-  private parseQuoteHistory(history: {
-    [key: string]: { close: number };
-  }): number[] {
-    const res: number[] = [];
-
-    for (let key in history) {
-      res.push(history[key].close);
-    }
-
-    return res;
   }
 
   private getCache(): { [search: string]: string[] } {
@@ -88,22 +77,37 @@ export class StockMarketService implements IStockMarket {
     const cache = this.getCache();
 
     cache[search] = values;
-    this.storage.setItem('cache', cache);
+    this.storage.setItem('cache', cache)
+  }
+
+  private transliterateToEnglish(string: string) {
+    let newString = '';
+
+    for(let i = 0; i < string.length; i++) {
+      if (Translit[string[i]]) {
+        newString += Translit[string[i]];
+      } else {
+        newString += string[i];
+      }
+    }
+
+    return newString;
   }
 
   searchQuotes(search: string, portfolioCurrency: Currency) {
-    const searchCache = this.getSearchCache(search);
+    const translitedSearch = this.transliterateToEnglish(search);
+    const searchCache = this.getSearchCache(translitedSearch);
 
     if (searchCache) {
-      return this.getQuotesBySymbols(searchCache);
+      return this.getQuotesBySymbols(searchCache).pipe(mergeMap(quotes => this.getQuotesWithHistory(quotes)));
     }
 
-    return this.stockMarketApiService.searchQuotes(search).pipe(
+    return this.stockMarketApiService.searchQuotes(translitedSearch).pipe(
       filter((res) => res != null),
-      map((res) =>
-        res.quotes.reduce((res: Quote[], element: any) => {
-          if (this.checkQuote(element, portfolioCurrency)) {
-            res.push(element.symbol);
+      map((quotes) =>
+        quotes.reduce((res: string[], quote: any) => {
+          if (this.validQuote(quote, portfolioCurrency)) {
+            res.push(quote.symbol);
           }
           return res;
         }, [])
@@ -113,13 +117,13 @@ export class StockMarketService implements IStockMarket {
         this.setSearchCache(search, symbols);
       }),
       switchMap((symbols) => this.getQuotesBySymbols(symbols)),
-      mergeMap((quotes) => this.getQuotesWithHistory(quotes))
+      concatMap((quotes) => this.getQuotesWithHistory(quotes))
     );
   }
 
   getQuotesBySymbols(symbols: string[]) {
     if (symbols.length) {
-      return this.stockMarketApiService.getQuotesBySimbols(symbols).pipe(
+      return forkJoin(symbols.map(symbol => this.stockMarketApiService.getQuoteBySimbol(symbol))).pipe(
         filter((quotes) => quotes.length > 0),
         map((quotes) => quotes.map((quote) => this.parseQuote(quote)))
       );
@@ -132,9 +136,6 @@ export class StockMarketService implements IStockMarket {
       return forkJoin(
         quotes.map((quote) => this.stockMarketApiService.getQuoteHistory(quote))
       ).pipe(
-        map((histories) =>
-          histories.map((history) => this.parseQuoteHistory(history))
-        ),
         map((histories) =>
           quotes.map((quote, index) => {
             quote.history = histories[index];
@@ -150,10 +151,9 @@ export class StockMarketService implements IStockMarket {
     if (quotes.length) {
       const symbols = quotes.map((quote) => quote.symbol);
 
-      return this.stockMarketApiService
-        .getQuotesBySimbols(symbols)
+      return forkJoin(symbols.map(symbol => this.stockMarketApiService.getQuoteBySimbol(symbol)))
         .pipe(
-          map((quotes) => quotes.map((quote): number => quote.regularMarketPrice))
+          map((quotes) => quotes.map((quote): number => quote.regularMarketPrice.raw))
         );
     }
     return of([]);

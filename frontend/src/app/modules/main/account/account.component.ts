@@ -25,7 +25,7 @@ export class AccountComponent {
 
   constructor(
     @Inject(IAuthToken) private authService: AuthService,
-    private navifationService: NavigationService
+    private navigationService: NavigationService
   ) {}
 
   turnEditAccountForm() {
@@ -44,6 +44,6 @@ export class AccountComponent {
 
   logout() {
     this.authService.logout();
-    this.navifationService.toLogin();
+    this.navigationService.toLogin();
   }
 }

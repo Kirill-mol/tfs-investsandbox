@@ -10,7 +10,7 @@
     [filled]="true"
     [x]="0"
     [y]="getMinOfData()"
-    [height]="(getMaxOfData() - getMinOfData()) * 1.05"
+    [height]="getMaxOfData() * 1.05 - getMinOfData()"
     [width]="data.length"
     [dots]="true"
     [value]="getMapData()"
@@ -22,13 +22,13 @@
   [axisYLabels]="getYLabels()"
   [horizontalLines]="horizontalLinesCount"
   [axisXLabels]="[]"
-  [verticalLines]="data.length"
+  [verticalLines]="0"
 >
   <tui-line-chart
     [filled]="true"
     [x]="0"
     [y]="getMinOfData()"
-    [height]="(getMaxOfData() - getMinOfData()) * 1.05"
+    [height]="getMaxOfData() * 1.05 - getMinOfData()"
     [width]="data.length"
     [value]="getMapData()"
   ></tui-line-chart>

@@ -21,6 +21,8 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  tap,
+  catchError,
 } from 'rxjs/operators';
 import { TuiStringHandler } from '@taiga-ui/cdk';
 
@@ -38,12 +40,16 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
 
   items$: Observable<ReadonlyArray<Quote> | null> = this.search$.pipe(
     filter((value) => value != '' && value != null),
-    debounceTime(700),
+    debounceTime(500),
     distinctUntilChanged(),
     map((search) => search.toLowerCase()),
     switchMap((searchLowerCase) =>
       this.stockMarketService.searchQuotes(searchLowerCase, this.portfolio.currency)
     ),
+    catchError((error) => {
+      console.log(error);
+      return [];
+    }),
     startWith([])
   );
 

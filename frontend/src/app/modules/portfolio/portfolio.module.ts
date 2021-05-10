@@ -1,3 +1,4 @@
+import { TuiButtonModule, TuiLinkModule } from '@taiga-ui/core';
 import { PortfolioQuotesModule } from './portfolio-quotes/portfolio-quotes.module';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TuiIslandModule } from '@taiga-ui/kit';
@@ -11,6 +12,8 @@ import { PortfolioComponent } from './portfolio.component';
     SharedModule,
     TuiIslandModule,
     TuiMoneyModule,
+    TuiButtonModule,
+    TuiLinkModule,
     PortfolioQuotesModule,
   ],
   exports: [PortfolioComponent],

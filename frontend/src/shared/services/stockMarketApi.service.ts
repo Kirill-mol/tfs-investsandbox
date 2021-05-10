@@ -13,32 +13,29 @@ export class StockMarketApiService implements IStockMarketApi {
   constructor(private httpClient: HttpClient) {}
 
   searchQuotes(search: string) {
-    return this.httpClient.get(
+    return this.httpClient.get<any>(
       `${UrlEnum.YAHOO_AUTOCOMPLETE}?q=${search}&region=US`
-    );
+    ).pipe(map(res => res.quotes));
   }
 
-  getQuotesBySimbols(symbols: string[]) {
-    const symbolsString = symbols.join(',');
-
-    return this.httpClient.get<any[]>(
-      `${UrlEnum.MBOUM_GET_QUOTE}/?symbol=${symbolsString}`
-    );
+  getQuoteBySimbol(symbol: string) {
+    return this.httpClient.get<any>(
+      `${UrlEnum.YAHOO_GET_QUOTE_INFO}/${symbol}?modules=price`
+    ).pipe(map((quote) => quote.quoteSummary.result[0].price));
   }
 
   getQuoteHistory(quote: Quote) {
     return this.httpClient
       .get<any>(
-        `${UrlEnum.MBOUM_GET_HISTORY}/?symbol=${quote.symbol}&interval=1h&diffandsplits=true`
+        `${UrlEnum.YAHOO_GET_QUOTE_HISTORY}/${quote.symbol}?interval=5d&range=1y`
       )
-      .pipe(map((history) => history.items));
+      .pipe(map((history) => history.chart.result[0].indicators.quote[0].close));
   }
 
   getCurrencyRate(from: Currency, to: Currency) {
     if (from !== to) {
-      return this.httpClient
-        .get<any>(`${UrlEnum.MBOUM_GET_QUOTE}/?symbol=${from}${to}=X`)
-        .pipe(map((quote) => quote[0].regularMarketPrice));
+      return this.getQuoteBySimbol(`${from}${to}=X`)
+        .pipe(map((quote) => quote.regularMarketPrice.raw));
     }
     return of(1);
   }

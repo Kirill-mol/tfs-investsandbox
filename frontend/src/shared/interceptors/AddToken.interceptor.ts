@@ -19,7 +19,7 @@ export class AddTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url === UrlEnum.API_ACCOUNT || req.url === UrlEnum.API_PORTFOLIO || req.url === UrlEnum.API_QUOTE) {
+    if (req.url === UrlEnum.API_ACCOUNT || req.url.startsWith(UrlEnum.API_PORTFOLIO) || req.url === UrlEnum.API_QUOTE) {
       const token = this.authService.getTokenValue();
       if (token) {
         const headers = req.headers.set('Authorization', token);

@@ -1,3 +1,4 @@
+import { ChangeType } from './../models/changeType.model';
 import { Observable } from 'rxjs';
 import { Portfolio } from './../models/portfolio.model';
 import { Account } from './../models/account.model';
@@ -14,7 +15,7 @@ export interface IBackend {
 
   quotesSymbols: string[];
   
-  changeDetector: EventEmitter<void>;
+  changeDetector: EventEmitter<void | ChangeType>;
 
   getAccount(): Observable<Account>;
 
@@ -31,6 +32,8 @@ export interface IBackend {
   getPortfolioIdByTitle(title: string): number;
 
   newPortfolio(title: string, balance: number, currency: Currency): void;
+
+  deletePortfolio(title: string): void;
 
   buyQuote(portfolioTitle: string, quote: Quote): void;
 

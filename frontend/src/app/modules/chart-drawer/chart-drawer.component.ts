@@ -1,14 +1,17 @@
-import { ChartSize, ChartSizeEnum } from './../../../shared/models/chartSize.model';
+import {
+  ChartSize,
+  ChartSizeEnum,
+} from './../../../shared/models/chartSize.model';
 import { Range, RangeEnum } from './../../../shared/models/range.model';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-chart-drawer',
   templateUrl: './chart-drawer.component.html',
   styleUrls: ['./chart-drawer.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartDrawerComponent {
+export class ChartDrawerComponent implements OnInit {
   private _day = 60 * 60 * 24 * 1000;
   private _month = this._day * 30;
 
@@ -23,7 +26,13 @@ export class ChartDrawerComponent {
 
   readonly chartSize = ChartSizeEnum;
 
-  readonly horizontalLinesCount = 8;
+  horizontalLinesCount = 8;
+
+  ngOnInit() {
+    if (this.size === ChartSizeEnum.SMALL) {
+      this.horizontalLinesCount = 3;
+    }
+  }
 
   getMapData(): [number, number][] {
     return this.data.map((val, index) => [index, val]);
@@ -46,17 +55,12 @@ export class ChartDrawerComponent {
   }
 
   getYLabels(): string[] {
-    const range = Math.round(
+    const range =
       (this.getMaxOfData() * 1.05 - this.getMinOfData()) /
-        this.horizontalLinesCount
-    );
+      (this.horizontalLinesCount - 1);
     const labels: string[] = [];
 
-    for (
-      let i = 0;
-      i < (this.size === ChartSizeEnum.BIG ? this.horizontalLinesCount : 3);
-      i++
-    ) {
+    for (let i = 0; i < this.horizontalLinesCount; i++) {
       labels.push(Math.round(this.getMinOfData() + i * range).toString());
     }
 

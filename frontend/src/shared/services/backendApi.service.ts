@@ -46,6 +46,10 @@ export class BackendApiService implements IBackendApi {
     })
   }
 
+  deletePortfolio(title: string) {
+    return this.httpClient.delete(`${UrlEnum.API_PORTFOLIO}/${title}`);
+  }
+
   buyQuote(portfolioTitle: string, quote: Quote) {
     return this.httpClient.post<any>(`${UrlEnum.API_QUOTE}`, {
       portfolioName: portfolioTitle,

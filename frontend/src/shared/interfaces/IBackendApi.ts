@@ -18,6 +18,8 @@ export interface IBackendApi {
 
   newPortfolio(title: string, balance: number, currency: Currency): Observable<any>;
 
+  deletePortfolio(title: string): Observable<any>;
+
   buyQuote(portfolioName: string, quote: Quote): Observable<any>;
 
   sellQuote(portfolioName: string, quote: Quote, quantity: number): Observable<any>;

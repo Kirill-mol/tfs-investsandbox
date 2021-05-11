@@ -93,7 +93,7 @@ export class UpdaterService {
     }
   }
 
-  startPortfolioUpdater(portfolioId: number, ms = 6000) {
+  startPortfolioUpdater(portfolioPos: number, ms = 6000) {
     this.cancelPortfolioUpdater();
     this._portfolioUpdater = interval(ms)
     .pipe(
@@ -101,18 +101,18 @@ export class UpdaterService {
       switchMap(() => this.forex.updateForex()),
       mergeMap(() =>
         this.stockMarketService.getQuotesBySymbols(
-          this.backendService.quotesSymbols
+          this.backendService.portfolios[portfolioPos].quotes.map(quote => quote.symbol)
         )
       ),
       tap((quotes) => {
-        this.backendService.portfolios[portfolioId].quotes = this.backendService.portfolios[portfolioId].quotes.map((quote, index) => {
+        this.backendService.portfolios[portfolioPos].quotes = this.backendService.portfolios[portfolioPos].quotes.map((quote, index) => {
           quote = {
             ...quote,
             price: quotes[index].price,
           }
           return quote;
         })
-        this.updatePortfolio(this.backendService.portfolios[portfolioId]);
+        this.updatePortfolio(this.backendService.portfolios[portfolioPos]);
       })
     )
     .subscribe(this.eventDetector);

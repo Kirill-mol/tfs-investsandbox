@@ -1,5 +1,4 @@
 import { IForex, IForexToken } from './../interfaces/IForex';
-import { ErrorType, ErrorTypeEnum } from './../models/errorType.model';
 import { EventType, EventTypeEnum } from '../models/eventType.model';
 import { IStatistic, IStatisticToken } from './../interfaces/IStatistic';
 import { RangeEnum } from './../models/range.model';
@@ -9,20 +8,16 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
 import { Portfolio } from './../models/portfolio.model';
 import { Currency } from './../models/currency.model';
 import {
-  catchError,
   map,
   tap,
   switchMap,
   mergeMap,
-  filter,
 } from 'rxjs/operators';
 import { IBackendApi, IBackendApiToken } from './../interfaces/IBackendApi';
 import { IBackend } from './../interfaces/IBackend';
 import { EventEmitter, Inject, Injectable } from '@angular/core';
 import { Account } from '../models/account.model';
-import { of } from 'rxjs';
 import { Quote } from '../models/quote.model';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class BackendService implements IBackend {
@@ -34,7 +29,7 @@ export class BackendService implements IBackend {
 
   private _quotesSymbols = new Set<string>();
 
-  readonly eventDetector = new EventEmitter<void | EventType>();
+  readonly eventDetector = new EventEmitter<EventType>();
 
   get account() {
     return this._account;
@@ -55,6 +50,21 @@ export class BackendService implements IBackend {
     @Inject(IStatisticToken) private statisticService: IStatistic,
     @Inject(IForexToken) private forex: IForex
   ) {}
+
+  private sortPortfolios(portfolios: Portfolio[]): Portfolio[] {
+    return portfolios.sort((a, b) => a.title < b.title ? -1 : 1);
+  }
+
+  private sortQuotes(quotes: Quote[]): Quote[] {
+    return quotes.sort((a, b) => {
+      if (a.shortname < b.shortname) {
+        return - 1;
+      } else if (a.shortname > b.shortname) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   private parsePortfolio(portfolio: any): Portfolio {
     const quotesParser = (quotes: any[]): Quote[] =>
@@ -95,9 +105,9 @@ export class BackendService implements IBackend {
         this._account.name = account.name;
         this._account.email = account.email;
         if (email && account.email !== oldEmail) {
-          this.eventDetector.emit(EventTypeEnum.EMAIL_EDITED);
+          this.eventDetector.emit(EventTypeEnum.EMAIL_CHANGED);
         } else {
-          this.eventDetector.emit();
+          this.eventDetector.emit(EventTypeEnum.ACCOUNT_EDITED);
         }
       }
     );
@@ -106,7 +116,9 @@ export class BackendService implements IBackend {
   editAccountPassword(password: string) {
     this.backendApiService
       .editAccount(undefined, undefined, password)
-      .subscribe();
+      .subscribe(() => {
+        this.eventDetector.emit(EventTypeEnum.PASSWORD_CHANGED);
+      });
   }
 
   getAccount() {
@@ -115,6 +127,7 @@ export class BackendService implements IBackend {
         account.portfolios = account.portfolios.map((portfolio) =>
           this.parsePortfolio(portfolio)
         );
+        this.sortPortfolios(account.portfolios);
         return account;
       }),
       tap((account) => {
@@ -222,6 +235,7 @@ export class BackendService implements IBackend {
           );
         }),
         map((quotes) => {
+          this.sortQuotes(quotes);
           this._account.portfolios[portfolioId].quotes = quotes;
           return this._account.portfolios[portfolioId];
         }),
@@ -264,7 +278,7 @@ export class BackendService implements IBackend {
       .subscribe(
         (portfolio) => {
           this._account.portfolios.push(portfolio);
-          this.eventDetector.emit();
+          this.eventDetector.emit(EventTypeEnum.PORTFOLIO_CREATED);
         }
       );
   }
@@ -306,7 +320,7 @@ export class BackendService implements IBackend {
             }
           );
           this._quotesSymbols.add(quote.symbol);
-          this.eventDetector.emit();
+          this.eventDetector.emit(EventTypeEnum.QUOTE_BOUGHT);
         }
       );
   }
@@ -337,7 +351,7 @@ export class BackendService implements IBackend {
               return quote2;
             }
           );
-          this.eventDetector.emit();
+          this.eventDetector.emit(EventTypeEnum.QUOTE_SOLD);
         }
       );
   }

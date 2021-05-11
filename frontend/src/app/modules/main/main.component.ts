@@ -1,6 +1,6 @@
+import { NotificationsService } from 'src/shared/services/notifications.service';
 import { NavigationService } from './../../../shared/services/navigation.service';
 import { EventTypeEnum } from '../../../shared/models/eventType.model';
-import { IForex, IForexToken } from './../../../shared/interfaces/IForex';
 import { Subscription } from 'rxjs';
 import { Account } from './../../../shared/models/account.model';
 import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
@@ -13,7 +13,6 @@ import {
   ChangeDetectorRef,
   OnDestroy,
 } from '@angular/core';
-import { ErrorTypeEnum } from 'src/shared/models/errorType.model';
 
 @Component({
   selector: 'app-main',
@@ -31,22 +30,31 @@ export class MainComponent implements OnInit, OnDestroy {
     private updater: UpdaterService,
     @Inject(IBackendToken) private backendService: IBackend,
     private navigator: NavigationService,
+    private notifications: NotificationsService,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.backendService.initFromMain();
     this.backendEventDetector = this.backendService.eventDetector.subscribe((type) => {
-      if (type === EventTypeEnum.EMAIL_EDITED) {
+      if (type === EventTypeEnum.EMAIL_CHANGED) {
         this.navigator.toLogin();
-      } else {
+      } else if (type === EventTypeEnum.PASSWORD_CHANGED) {
+        this.notifications.showSuccess('Пароль изменен');
+      } else if (type === EventTypeEnum.ACCOUNT_LOADED) {
         this.account = this.backendService.account;
         this.updater.startMainUpdater();
         this.cd.markForCheck();
+      } else if (type === EventTypeEnum.ACCOUNT_EDITED) {
+        this.notifications.showSuccess('Данные аккаунта изименены');
+        this.cd.markForCheck();
+      } else if (type === EventTypeEnum.PORTFOLIO_CREATED) {
+        this.notifications.showSuccess('Портфель успешно создан');
       }
     });
     this.updaterEventDetector = this.updater.eventDetector.subscribe(() => {
       this.account = this.backendService.account;
+      this.cd.markForCheck();
     });
   }
 

@@ -16,7 +16,7 @@ export interface IBackend {
 
   quotesSymbols: string[];
   
-  eventDetector: EventEmitter<void | EventType>;
+  eventDetector: EventEmitter<EventType>;
 
   getAccount(): Observable<Account>;
 

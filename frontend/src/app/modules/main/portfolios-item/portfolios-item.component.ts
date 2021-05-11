@@ -1,4 +1,3 @@
-import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 import { Subscription } from 'rxjs';
 import { UpdaterService } from './../../../../shared/services/updater.service';
 import { NavigationService } from './../../../../shared/services/navigation.service';
@@ -10,7 +9,6 @@ import {
   ChangeDetectorRef,
   OnInit,
   OnDestroy,
-  Inject,
 } from '@angular/core';
 
 @Component({
@@ -20,8 +18,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortfoliosItemComponent implements OnInit, OnDestroy {
-  private updating!: Subscription;
-  private backendChangeDetector!: Subscription;
+  private updaterEventDetector!: Subscription;
 
   @Input()
   portfolio!: Portfolio;
@@ -29,8 +26,7 @@ export class PortfoliosItemComponent implements OnInit, OnDestroy {
   constructor(
     private navigator: NavigationService,
     private updater: UpdaterService,
-    private cd: ChangeDetectorRef,
-    @Inject(IBackendToken) private backendService: IBackend
+    private cd: ChangeDetectorRef
   ) {}
 
   toPortfolio() {
@@ -38,16 +34,12 @@ export class PortfoliosItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.updating = this.updater.eventDetector.subscribe(() => {
+    this.updaterEventDetector = this.updater.eventDetector.subscribe(() => {
       this.cd.markForCheck();
     });
-    this.backendChangeDetector = this.backendService.eventDetector.subscribe(() => {
-      this.cd.markForCheck();
-    })
   }
 
   ngOnDestroy() {
-    this.updating.unsubscribe();
-    this.backendChangeDetector.unsubscribe();
+    this.updaterEventDetector.unsubscribe();
   }
 }

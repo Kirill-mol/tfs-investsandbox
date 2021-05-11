@@ -1,6 +1,13 @@
 <form [formGroup]="form" class="tui-form form" (submit)="submitForm()">
   <div class="form_container">
-    <tui-group [orientation]="verticalOrientation">
+    <ul class="tui-list" *ngIf="type === authFormType.REGISTRATION">
+      <li class="tui-list__item requirement" [class.requirement_good]="validateNameLength()">Имя - не менее 3 знаков и не более 30</li>
+      <li class="tui-list__item requirement" [class.requirement_good]="validateNamePattern()">Допустимые символы для имени: латиница, кириллица, цифры, пробел</li>
+      <li class="tui-list__item requirement" [class.requirement_good]="validatePasswordLength()">Пароль - не менее 6 знаков и не более 30</li>
+      <li class="tui-list__item requirement" [class.requirement_good]="validateEmailPattern()">Действительная почта</li>
+      <li class="tui-list__item requirement" [class.requirement_good]="validatePasswordConfirm()">Пароль подтвержден</li>
+    </ul>
+    <tui-group [orientation]="tuiVerticalOrientation">
       <tui-group>
         <tui-input *ngIf="type === authFormType.EDIT_ACCOUNT || type === authFormType.REGISTRATION" formControlName="name">
           Имя

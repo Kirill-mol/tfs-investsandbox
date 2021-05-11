@@ -1,7 +1,7 @@
 import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 import { IAuth, IAuthToken } from '../../../shared/interfaces/IAuth';
 import { NavigationService } from '../../../shared/services/navigation.service';
-import { TuiNotificationsService, TuiOrientation } from '@taiga-ui/core';
+import { TuiOrientation } from '@taiga-ui/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,6 +21,7 @@ import {
   AccountFormType,
   AccountFormTypeEnum,
 } from 'src/shared/models/accountFormType.model';
+import { NotificationsService } from 'src/shared/services/notifications.service';
 
 @Component({
   selector: 'app-account-form',
@@ -29,12 +30,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormComponent implements OnInit {
-  private _passwordMinLength = 6;
-  private _passwordMaxLength = 20;
-  private _nameMinLength = 3;
-  private _nameMaxLength = 30;
-  private _emailPattern = /^[\w-]+@[a-zA-Z\d]+\.[a-zA-Z\d]+$/;
-  private _namePattern = /^[\wа-яА-я- ]+$/;
+  readonly passwordMinLength = 6;
+  readonly passwordMaxLength = 30;
+  readonly nameMinLength = 3;
+  readonly nameMaxLength = 30;
+  readonly emailPattern = /^[\w-]+@[a-zA-Z\d]+\.[a-zA-Z\d]+$/;
+  readonly namePattern = /^[\da-zA-Zа-яА-я ]+$/;
+  readonly authFormType = AccountFormTypeEnum;
 
   @Input()
   type: AccountFormType = AccountFormTypeEnum.LOGIN;
@@ -45,16 +47,30 @@ export class AccountFormComponent implements OnInit {
   @Input()
   email!: string;
 
-  readonly authFormType = AccountFormTypeEnum;
-
   form!: FormGroup;
 
-  verticalOrientation = TuiOrientation.Vertical;
+  tuiVerticalOrientation = TuiOrientation.Vertical;
+
+  get nameInputValue() {
+    return this.form.get('name')?.value;
+  }
+
+  get emailInputValue() {
+    return this.form.get('email')?.value;
+  }
+
+  get passwordInputValue() {
+    return this.form.get('password')?.value;
+  }
+
+  get passwordConfirmInputValue() {
+    return this.form.get('passwordConfirm')?.value;
+  }
 
   constructor(
     @Inject(IAuthToken) private authService: IAuth,
     @Inject(IBackendToken) private backendService: IBackend,
-    @Inject(TuiNotificationsService) private notifications: TuiNotificationsService,
+    private notifications: NotificationsService,
     private navigationService: NavigationService
   ) {}
 
@@ -64,12 +80,12 @@ export class AccountFormComponent implements OnInit {
         this.form = new FormGroup({
           email: new FormControl(null, [
             Validators.required,
-            Validators.pattern(this._emailPattern),
+            Validators.pattern(this.emailPattern),
           ]),
           password: new FormControl(null, [
             Validators.required,
-            Validators.minLength(this._passwordMinLength),
-            Validators.maxLength(this._passwordMaxLength),
+            Validators.minLength(this.passwordMinLength),
+            Validators.maxLength(this.passwordMaxLength),
           ]),
         });
         break;
@@ -77,12 +93,12 @@ export class AccountFormComponent implements OnInit {
         this.form = new FormGroup(
           {
             name: new FormControl(this.name, [
-              Validators.pattern(this._namePattern),
-              Validators.minLength(this._nameMinLength),
-              Validators.maxLength(this._nameMaxLength),
+              Validators.pattern(this.namePattern),
+              Validators.minLength(this.nameMinLength),
+              Validators.maxLength(this.nameMaxLength),
             ]),
             email: new FormControl(this.email, [
-              Validators.pattern(this._emailPattern),
+              Validators.pattern(this.emailPattern),
             ]),
           },
           [this.modifiedValidator()]
@@ -93,8 +109,8 @@ export class AccountFormComponent implements OnInit {
           {
             password: new FormControl(null, [
               Validators.required,
-              Validators.minLength(this._passwordMinLength),
-              Validators.maxLength(this._passwordMaxLength),
+              Validators.minLength(this.passwordMinLength),
+              Validators.maxLength(this.passwordMaxLength),
             ]),
             passwordConfirm: new FormControl(null, [Validators.required]),
           },
@@ -106,18 +122,18 @@ export class AccountFormComponent implements OnInit {
           {
             name: new FormControl(this.name, [
               Validators.required,
-              Validators.pattern(this._namePattern),
-              Validators.minLength(this._nameMinLength),
-              Validators.maxLength(this._nameMaxLength),
+              Validators.pattern(this.namePattern),
+              Validators.minLength(this.nameMinLength),
+              Validators.maxLength(this.nameMaxLength),
             ]),
             email: new FormControl(this.email, [
-              Validators.pattern(this._emailPattern),
+              Validators.pattern(this.emailPattern),
               Validators.required,
             ]),
             password: new FormControl(null, [
               Validators.required,
-              Validators.minLength(this._passwordMinLength),
-              Validators.maxLength(this._passwordMaxLength),
+              Validators.minLength(this.passwordMinLength),
+              Validators.maxLength(this.passwordMaxLength),
             ]),
             passwordConfirm: new FormControl(null, Validators.required),
           },
@@ -130,19 +146,19 @@ export class AccountFormComponent implements OnInit {
   private registration() {
     this.authService
       .registration(
-        this.deleteExtraSpaces(this.form.get('name')?.value),
-        this.deleteExtraSpaces(this.form.get('email')?.value),
-        this.deleteExtraSpaces(this.form.get('password')?.value)
+        this.deleteExtraSpaces(this.nameInputValue),
+        this.deleteExtraSpaces(this.emailInputValue),
+        this.deleteExtraSpaces(this.passwordInputValue)
       )
       .subscribe(
         () => {
           this.navigationService.toMain();
         },
-        (error) => {
-          console.log(error);
-          this.notifications.show('Ошибка регистрации', {
-            label: 'Возможно, такой пользователь уже существует.'
-          }).subscribe();
+        () => {
+          this.notifications.showError(
+            'Ошибка регистрации',
+            'Возможно, такой пользователь уже существует'
+          );
         }
       );
   }
@@ -150,22 +166,27 @@ export class AccountFormComponent implements OnInit {
   private login() {
     this.authService
       .login(
-        this.deleteExtraSpaces(this.form.get('email')?.value),
-        this.deleteExtraSpaces(this.form.get('password')?.value)
+        this.deleteExtraSpaces(this.emailInputValue),
+        this.deleteExtraSpaces(this.passwordInputValue)
       )
       .subscribe(
         () => {
           this.navigationService.toMain();
         },
         (error) => {
-          console.log(error);
+          if (error.status === 403) {
+            this.notifications.showError(
+              'Ошибка авторизации',
+              'Неверная почта и/или пароль'
+            );
+          }
         }
       );
   }
 
   private editAccountInfo() {
-    const nickname = this.deleteExtraSpaces(this.form.get('name')?.value);
-    const email = this.deleteExtraSpaces(this.form.get('email')?.value);
+    const nickname = this.deleteExtraSpaces(this.nameInputValue);
+    const email = this.deleteExtraSpaces(this.emailInputValue);
 
     if (nickname || email) {
       this.backendService.editAccountInfo(
@@ -176,7 +197,7 @@ export class AccountFormComponent implements OnInit {
   }
 
   private editAccountPassword() {
-    const password = this.deleteExtraSpaces(this.form.get('password')?.value);
+    const password = this.deleteExtraSpaces(this.passwordInputValue);
 
     if (password) {
       this.backendService.editAccountPassword(password);
@@ -223,5 +244,37 @@ export class AccountFormComponent implements OnInit {
         this.editAccountPassword();
         break;
     }
+  }
+
+  validateNameLength(): boolean {
+    return (
+      this.nameInputValue &&
+      this.nameInputValue.length >= this.nameMinLength &&
+      this.nameInputValue.length <= this.nameMaxLength
+    );
+  }
+
+  validateNamePattern(): boolean {
+    return this.nameInputValue && this.namePattern.test(this.nameInputValue);
+  }
+
+  validatePasswordLength(): boolean {
+    return (
+      this.passwordInputValue &&
+      this.passwordInputValue.length >= this.passwordMinLength &&
+      this.passwordInputValue.length <= this.passwordMaxLength
+    );
+  }
+
+  validateEmailPattern(): boolean {
+    return this.emailInputValue && this.emailPattern.test(this.emailInputValue);
+  }
+
+  validatePasswordConfirm(): boolean {
+    return (
+      this.passwordConfirmInputValue &&
+      this.passwordInputValue &&
+      this.passwordInputValue === this.passwordConfirmInputValue
+    );
   }
 }

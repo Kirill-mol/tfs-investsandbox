@@ -18,7 +18,7 @@ import { IBackendApiToken } from './../shared/interfaces/IBackendApi';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MainModule } from './modules/main/main.module';
-import { TuiRootModule, TUI_ICONS_PATH, iconsPathFactory } from '@taiga-ui/core';
+import { TuiRootModule, TUI_ICONS_PATH, iconsPathFactory, TuiNotificationsModule } from '@taiga-ui/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,6 +39,7 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     CommonModule,
     BrowserAnimationsModule,
     TuiRootModule,
+    TuiNotificationsModule,
     AuthModule,
     MainModule,
     PageNotFoundModule,

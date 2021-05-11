@@ -1,3 +1,4 @@
+import { NotificationsService } from 'src/shared/services/notifications.service';
 import { EventTypeEnum } from '../../../shared/models/eventType.model';
 import { Subscription } from 'rxjs';
 import { RangeEnum } from './../../../shared/models/range.model';
@@ -58,6 +59,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     private updater: UpdaterService,
     private route: ActivatedRoute,
     private navigator: NavigationService,
+    private notifications: NotificationsService,
     private cd: ChangeDetectorRef,
     @Inject(IBackendToken) private backendService: IBackend,
   ) {}
@@ -67,8 +69,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       this.backendService.initFromPortfolio(this._titleParam);
 
       this._backendEventDetector = this.backendService.eventDetector.subscribe(
-        (msg) => {
-          if (msg === EventTypeEnum.ACCOUNT_LOADED) {
+        (type) => {
+          if (type === EventTypeEnum.ACCOUNT_LOADED) {
             this._portfolioPos = this._titleParam
               ? this.backendService.getPortfolioIdByTitle(this._titleParam)
               : -1;
@@ -81,10 +83,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
             } else {
               this.navigator.toMain();
             }
-          } else if (msg === EventTypeEnum.PORTFOLIO_DELETED) {
+          } else if (type === EventTypeEnum.PORTFOLIO_DELETED) {
             this.navigator.toMain();
-          } else {
-            this.portfolio = this.backendService.portfolios[this._portfolioPos];
+          } else if (type === EventTypeEnum.QUOTE_BOUGHT) {
+            this.notifications.showSuccess('Акции успешно куплены');
+            this.cd.markForCheck();
+          } else if (type === EventTypeEnum.QUOTE_SOLD) {
+            this.notifications.showSuccess('Акции успешно проданы');
             this.cd.markForCheck();
           }
         }

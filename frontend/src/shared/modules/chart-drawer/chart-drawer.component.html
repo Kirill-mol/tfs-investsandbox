@@ -1,5 +1,5 @@
 <tui-axes
-  *ngIf="size === chartSize.BIG"
+  *ngIf="size === chartSize.L"
   class="axes-big"
   [axisXLabels]="getDates()"
   [axisYLabels]="getYLabels()"
@@ -17,7 +17,7 @@
   ></tui-line-chart>
 </tui-axes>
 <tui-axes
-  *ngIf="size === chartSize.SMALL"
+  *ngIf="size === chartSize.S"
   class="axes-small"
   [axisYLabels]="getYLabels()"
   [horizontalLines]="horizontalLinesCount"

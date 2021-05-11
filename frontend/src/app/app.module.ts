@@ -1,3 +1,4 @@
+import { PageNotFoundModule } from './modules/page-not-found/page-not-found.module';
 import { InterceptErrorInterceptor } from './../shared/interceptors/InterceptError.interceptor';
 import { ForexService } from './../shared/services/forex.service';
 import { IForexToken } from './../shared/interfaces/IForex';
@@ -5,7 +6,7 @@ import { CalculateService } from './../shared/services/calculate.service';
 import { ICalculateToken } from './../shared/interfaces/ICalculate';
 import { StockMarketApiService } from '../shared/services/stockMarketApi.service';
 import { StockMarketService } from '../shared/services/stockMarket.service';
-import { AddTokenInterceptor } from './../shared/interceptors/AddToken.interceptor';
+import { AddTokenInterceptor } from '../shared/interceptors/addToken.interceptor';
 import { AuthService } from './../shared/services/auth.service';
 import { IAuthToken } from './../shared/interfaces/IAuth';
 import { BackendService } from './../shared/services/backend.service';
@@ -40,6 +41,7 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     TuiRootModule,
     AuthModule,
     MainModule,
+    PageNotFoundModule,
     PortfolioModule,
     HttpClientModule,
     AppRoutingModule

@@ -14,6 +14,6 @@
             <button tuiButton size="s" appearance="custom" (click)="logout()">Выйти</button>
         </div>
     </div>
-    <app-auth-form *ngIf="editAccountFormOpened" [type]="authFormType.EDIT_ACCOUNT" [name]="name" [email]="email"></app-auth-form>
-    <app-auth-form *ngIf="editPasswordFormOpened" [type]="authFormType.EDIT_PASSWORD"></app-auth-form>
+    <app-account-form *ngIf="editAccountFormOpened" [type]="authFormType.EDIT_ACCOUNT" [name]="name" [email]="email"></app-account-form>
+    <app-account-form *ngIf="editPasswordFormOpened" [type]="authFormType.EDIT_PASSWORD"></app-account-form>
 </tui-island>

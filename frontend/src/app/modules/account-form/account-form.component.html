@@ -2,7 +2,7 @@
   <div class="form_container">
     <tui-group [orientation]="verticalOrientation">
       <tui-group>
-        <tui-input *ngIf="type === authFormType.EDIT_ACCOUNT || type === authFormType.REGISTRATION" formControlName="nickname">
+        <tui-input *ngIf="type === authFormType.EDIT_ACCOUNT || type === authFormType.REGISTRATION" formControlName="name">
           Имя
         </tui-input>
         <tui-input formControlName="email" *ngIf="type !== authFormType.EDIT_PASSWORD">

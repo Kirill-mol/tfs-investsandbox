@@ -1,3 +1,4 @@
+import { IAuth, IAuthToken } from './../interfaces/IAuth';
 import { NavigationService } from './../services/navigation.service';
 import { UrlEnum } from '../models/url.model';
 import { Inject, Injectable } from '@angular/core';
@@ -6,15 +7,15 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class InterceptErrorInterceptor implements HttpInterceptor {
   constructor(
-    private navigator: NavigationService
+    private navigator: NavigationService,
+    @Inject(IAuthToken) private authService: IAuth,
   ) {}
 
   intercept(
@@ -25,8 +26,9 @@ export class InterceptErrorInterceptor implements HttpInterceptor {
       return next.handle(req).pipe(catchError(error => {
         if (error.status === 403 || error.status === 401) {
           this.navigator.toLogin();
+          this.authService.logout();
         }
-        return of(error);
+        return throwError(error);
       }));
     }
     return next.handle(req);

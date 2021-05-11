@@ -1,6 +1,4 @@
-import { ErrorTypeEnum } from 'src/shared/models/errorType.model';
 import { EventTypeEnum } from '../../../shared/models/eventType.model';
-import { IForex, IForexToken } from './../../../shared/interfaces/IForex';
 import { Subscription } from 'rxjs';
 import { RangeEnum } from './../../../shared/models/range.model';
 import { NavigationService } from './../../../shared/services/navigation.service';
@@ -24,9 +22,9 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
-  private _title = this.route.snapshot.paramMap.get('title');
+  private _titleParam = this.route.snapshot.paramMap.get('title');
 
-  private _id = -1;
+  private _portfolioPos = -1;
 
   private _backendEventDetector!: Subscription;
 
@@ -34,7 +32,27 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   readonly ranges = RangeEnum;
 
-  portfolio!: Portfolio;
+  portfolioLoaded = false;
+
+  portfolio: Portfolio = {
+    title: '######',
+    initBalance: 123456,
+    balance: 123456,
+    realBalance: 123456,
+    currency: 'RUB',
+    income: {
+      absolute: 123,
+      percent: {
+        onAlltime: 123,
+        onMonth: 123,
+      }
+    },
+    history: {
+      onAllTime: [],
+      onMonth: []
+    },
+    quotes: []
+  };
 
   constructor(
     private updater: UpdaterService,
@@ -45,19 +63,20 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this._title) {
-      this.backendService.initFromPortfolio(this._title);
+    if (this._titleParam) {
+      this.backendService.initFromPortfolio(this._titleParam);
 
       this._backendEventDetector = this.backendService.eventDetector.subscribe(
         (msg) => {
           if (msg === EventTypeEnum.ACCOUNT_LOADED) {
-            this._id = this._title
-              ? this.backendService.getPortfolioIdByTitle(this._title)
+            this._portfolioPos = this._titleParam
+              ? this.backendService.getPortfolioIdByTitle(this._titleParam)
               : -1;
 
-            if (this._id !== -1) {
-              this.portfolio = this.backendService.portfolios[this._id];
-              this.updater.startPortfolioUpdater(this._id);
+            if (this._portfolioPos !== -1) {
+              this.portfolio = this.backendService.portfolios[this._portfolioPos];
+              this.portfolioLoaded = true;
+              this.updater.startPortfolioUpdater(this._portfolioPos);
               this.cd.markForCheck();
             } else {
               this.navigator.toMain();
@@ -65,14 +84,14 @@ export class PortfolioComponent implements OnInit, OnDestroy {
           } else if (msg === EventTypeEnum.PORTFOLIO_DELETED) {
             this.navigator.toMain();
           } else {
-            this.portfolio = this.backendService.portfolios[this._id];
+            this.portfolio = this.backendService.portfolios[this._portfolioPos];
             this.cd.markForCheck();
           }
         }
       );
 
       this._updaterEventDetector = this.updater.eventDetector.subscribe(() => {
-        this.portfolio = this.backendService.portfolios[this._id];
+        this.portfolio = this.backendService.portfolios[this._portfolioPos];
         this.cd.markForCheck();
       });
     } else {

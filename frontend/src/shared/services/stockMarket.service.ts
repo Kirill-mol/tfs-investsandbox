@@ -117,14 +117,14 @@ export class StockMarketService implements IStockMarket {
         this.setSearchCache(search, symbols);
       }),
       switchMap((symbols) => this.getQuotesBySymbols(symbols)),
-      concatMap((quotes) => this.getQuotesWithHistory(quotes))
+      mergeMap((quotes) => this.getQuotesWithHistory(quotes))
     );
   }
 
   getQuotesBySymbols(symbols: string[]) {
     if (symbols.length) {
       return forkJoin(symbols.map(symbol => this.stockMarketApiService.getQuoteBySimbol(symbol))).pipe(
-        filter((quotes) => quotes.length > 0),
+        filter((quotes) => quotes && quotes.length > 0),
         map((quotes) => quotes.map((quote) => this.parseQuote(quote)))
       );
     }

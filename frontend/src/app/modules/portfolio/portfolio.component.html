@@ -1,30 +1,30 @@
 <a class="link-to-main" tuiLink href="/main">&larr; На главную</a>
 <div class="title">
-  <h2 *ngIf="portfolio; else loader" class="tui-text_h2">{{portfolio.title}}</h2>
-  <button tuiButton size="s" appearance="custom" *ngIf="portfolio" type="button" (click)="deletePortfolio()">Закрыть портфель</button>
+  <h2 [class.tui-skeleton]="!portfolioLoaded" class="tui-text_h2">{{portfolio.title}}</h2>
+  <button *ngIf="portfolioLoaded" tuiButton size="s" appearance="custom" type="button" (click)="deletePortfolio()">Закрыть портфель</button>
 </div>
 <div class="info">
   <tui-island>
     <div class="feauters">
       <div>
         <h3 class="tui-island__category">Начальный капитал</h3>
-        <tui-money *ngIf="portfolio" [value]="portfolio.initBalance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.initBalance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Свободный капитал</h3>
-        <tui-money *ngIf="portfolio" [value]="portfolio.balance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.balance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Объем портфеля</h3>
-        <tui-money *ngIf="portfolio" [value]="portfolio.realBalance || portfolio.balance" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [value]="portfolio.realBalance || portfolio.balance" [currency]="portfolio.currency"></tui-money>
       </div>
       <div>
         <h3 class="tui-island__category">Абсолютный доход</h3>
-        <tui-money *ngIf="portfolio" [colored]="true" [value]="portfolio.income?.absolute || 0" [currency]="portfolio.currency"></tui-money>
+        <tui-money [class.tui-skeleton]="!portfolioLoaded" [colored]="true" [value]="portfolio.income?.absolute || 0" [currency]="portfolio.currency"></tui-money>
       </div>
     </div>
   </tui-island>
-  <tui-island *ngIf="portfolio && (portfolio.history.onMonth.length > 1 || portfolio.history.onAllTime.length > 1)">
+  <tui-island *ngIf="(portfolio.history.onMonth.length > 1 || portfolio.history.onAllTime.length > 1)">
     <h3 class="tui-island__title">Объем портфеля</h3>
     <div *ngIf="portfolio.history.onMonth.length > 1">
       <h4 class="tui-island__paragraph">За последние 30 дней</h4>
@@ -35,8 +35,5 @@
       <app-chart-drawer [range]="ranges.ALL" [data]="portfolio.history.onAllTime"></app-chart-drawer>
     </div>
   </tui-island>
-  <app-portfolio-quotes *ngIf="portfolio" [portfolio]="portfolio" [quotes]="portfolio.quotes"></app-portfolio-quotes>
+  <app-portfolio-quotes [portfolio]="portfolio" [quotes]="portfolio.quotes"></app-portfolio-quotes>
 </div>
-
-<ng-template #loader class="tui-skeleton loader">
-</ng-template>

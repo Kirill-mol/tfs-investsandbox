@@ -10,7 +10,6 @@ import { SharedModule } from 'src/shared/modules/shared.module';
     SharedModule,
     ReactiveFormsModule,
     TuiInputNumberModule,
-    TuiButtonModule,
     TuiTextfieldControllerModule
   ],
   exports: [QuotesSellComponent],

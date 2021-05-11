@@ -1,5 +1,3 @@
-import { ChartSizeEnum } from './../../../../shared/models/chartSize.model';
-import { QuoteTypeEnum } from './../../../../shared/models/quoteType.model';
 import { Quote } from './../../../../shared/models/quote.model';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Portfolio } from 'src/shared/models/portfolio.model';
@@ -16,8 +14,4 @@ export class PortfolioQuotesComponent {
 
   @Input()
   portfolio!: Portfolio;
-
-  readonly quoteType = QuoteTypeEnum;
-
-  readonly chartSizes = ChartSizeEnum;
 }

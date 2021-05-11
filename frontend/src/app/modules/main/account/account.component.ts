@@ -1,4 +1,4 @@
-import { AuthFormTypeEnum } from './../../../../shared/models/authFormType.model';
+import { AccountFormTypeEnum } from '../../../../shared/models/accountFormType.model';
 import { NavigationService } from './../../../../shared/services/navigation.service';
 import { AuthService } from './../../../../shared/services/auth.service';
 import { IAuthToken } from './../../../../shared/interfaces/IAuth';
@@ -21,7 +21,7 @@ export class AccountComponent {
 
   editAccountFormOpened = false;
   editPasswordFormOpened = false;
-  authFormType = AuthFormTypeEnum;
+  authFormType = AccountFormTypeEnum;
 
   constructor(
     @Inject(IAuthToken) private authService: AuthService,

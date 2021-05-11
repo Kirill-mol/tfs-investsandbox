@@ -52,11 +52,11 @@ export class UpdaterService {
     return (h >= 10 || h === 0) && d > 0 && d < 6;
   }
 
-  startMainUpdater(ms = 5000) {
+  startMainUpdater(ms = 6000) {
     this.cancelMainUpdater();
     this._mainUpdater = interval(ms)
       .pipe(
-        filter(() => this.validTime()),
+        filter(() => this.validTime() && this.backendService.quotesSymbols.length > 0),
         switchMap(() => this.forex.updateForex()),
         mergeMap(() =>
           this.stockMarketService.getQuotesBySymbols(
@@ -93,11 +93,11 @@ export class UpdaterService {
     }
   }
 
-  startPortfolioUpdater(portfolioId: number, ms = 5000) {
+  startPortfolioUpdater(portfolioId: number, ms = 6000) {
     this.cancelPortfolioUpdater();
     this._portfolioUpdater = interval(ms)
     .pipe(
-      filter(() => this.validTime()),
+      filter(() => this.validTime() && this.backendService.quotesSymbols.length > 0),
       switchMap(() => this.forex.updateForex()),
       mergeMap(() =>
         this.stockMarketService.getQuotesBySymbols(

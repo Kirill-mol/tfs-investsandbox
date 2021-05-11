@@ -4,20 +4,17 @@ import {
   TuiDataListWrapperModule,
   TuiInputModule,
   TuiInputNumberModule,
-  TuiIslandModule,
   TuiSelectModule,
 } from '@taiga-ui/kit';
 import { NgModule } from '@angular/core';
 
 import { PortfoliosAddComponent } from './portfolios-add.component';
-import { TuiDataListModule, TuiGroupModule, TuiButtonModule } from '@taiga-ui/core';
+import { TuiDataListModule, TuiGroupModule } from '@taiga-ui/core';
 
 @NgModule({
   imports: [
     SharedModule,
-    TuiButtonModule,
     TuiGroupModule,
-    TuiIslandModule,
     TuiInputNumberModule,
     TuiInputModule,
     TuiSelectModule,

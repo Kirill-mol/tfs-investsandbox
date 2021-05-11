@@ -3,7 +3,8 @@ import { IBackendApi, IBackendApiToken } from './../interfaces/IBackendApi';
 import { IAuth } from './../interfaces/IAuth';
 import { Inject, Injectable } from '@angular/core';
 import { Token } from '../models/token.model';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService implements IAuth {
@@ -44,7 +45,7 @@ export class AuthService implements IAuth {
   registration(nickname: string, email: string, password: string) {
     return this.backendApiService
       .registration(nickname, email, password)
-      .pipe(switchMap((res) => this.login(email, password)));
+      .pipe(switchMap(() => this.login(email, password)));
   }
 
   getTokenValue() {

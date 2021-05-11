@@ -1,4 +1,3 @@
-import { LandingComponent } from './modules/landing/landing.component';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 import { MainComponent } from './modules/main/main.component';
 import { PortfolioComponent } from './modules/portfolio/portfolio.component';
@@ -17,7 +16,7 @@ const routes: Routes = [
     path: 'main', component: MainComponent
   },
   {
-    path: '', component: LandingComponent
+    path: '', redirectTo: '/main', pathMatch: 'full'
   },
   {
     path: '**', component: PageNotFoundComponent

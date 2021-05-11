@@ -5,55 +5,61 @@ import { IBackendApi } from './../interfaces/IBackendApi';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Account } from '../models/account.model';
-import { Observable } from 'rxjs';
 import { Quote } from '../models/quote.model';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class BackendApiService implements IBackendApi {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   private _parseAccount(account: AccountFromBackend): Account {
     return {
       email: account.email,
       name: account.nickname,
-      portfolios: account.portfolios
-    }
+      portfolios: account.portfolios,
+    };
   }
 
   editAccount(name?: string, email?: string, password?: string) {
-    return this.httpClient.put<AccountFromBackend>(UrlEnum.API_ACCOUNT, {
-      nickname: name,
-      email,
-      password
-    }).pipe(map(account => this._parseAccount(account)));
+    return this.httpClient
+      .put<AccountFromBackend>(UrlEnum.API_ACCOUNT, {
+        nickname: name,
+        email,
+        password,
+      })
+      .pipe(map((account) => this._parseAccount(account)));
   }
 
   getAccount() {
-    return this.httpClient.get<AccountFromBackend>(UrlEnum.API_ACCOUNT).pipe(map(account => this._parseAccount(account)));
+    return this.httpClient
+      .get<AccountFromBackend>(UrlEnum.API_ACCOUNT)
+      .pipe(map((account) => this._parseAccount(account)));
   }
 
   login(email: string, password: string) {
     return this.httpClient.post<any>(UrlEnum.API_LOGIN, {
       email,
-      password
+      password,
     });
   }
 
   registration(name: string, email: string, password: string) {
-    return this.httpClient.post<AccountFromBackend>(UrlEnum.API_REGISTER, {
-      nickname: name,
-      email,
-      password
-    }).pipe(map(account => this._parseAccount(account)));
+    return this.httpClient
+      .post<AccountFromBackend>(UrlEnum.API_REGISTER, {
+        nickname: name,
+        email,
+        password,
+      })
+      .pipe(map((account) => this._parseAccount(account)));
   }
 
   newPortfolio(title: string, balance: number, currency: Currency) {
     return this.httpClient.post<any>(UrlEnum.API_PORTFOLIO, {
       name: title,
       balance,
-      currency
-    })
+      currency,
+    });
   }
 
   deletePortfolio(title: string) {
@@ -72,7 +78,7 @@ export class BackendApiService implements IBackendApi {
       portfolioName: portfolioTitle,
       price: quote.price,
       symbol: quote.symbol,
-      quantity
-    })
+      quantity,
+    });
   }
 }

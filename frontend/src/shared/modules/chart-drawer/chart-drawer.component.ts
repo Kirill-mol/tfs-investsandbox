@@ -1,8 +1,8 @@
 import {
-  ChartSize,
-  ChartSizeEnum,
-} from './../../../shared/models/chartSize.model';
-import { Range, RangeEnum } from './../../../shared/models/range.model';
+  Size,
+  SizeEnum,
+} from '../../models/size.model';
+import { Range, RangeEnum } from '../../models/range.model';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -22,16 +22,28 @@ export class ChartDrawerComponent implements OnInit {
   range: Range = RangeEnum.MONTH;
 
   @Input()
-  size: ChartSize = ChartSizeEnum.BIG;
+  size: Size = SizeEnum.L;
 
-  readonly chartSize = ChartSizeEnum;
+  readonly chartSize = SizeEnum;
 
   horizontalLinesCount = 8;
 
   ngOnInit() {
-    if (this.size === ChartSizeEnum.SMALL) {
+    if (this.size === SizeEnum.S) {
       this.horizontalLinesCount = 3;
     }
+  }
+
+  private getMonthAndDay(str: string): string {
+    const splited = str.split(' ');
+
+    return splited.slice(1, 3).join(' ');
+  }
+
+  private getMonth(str: string): string {
+    const splited = str.split(' ');
+
+    return `${splited[1]} ${splited[3]}`;
   }
 
   getMapData(): [number, number][] {
@@ -73,17 +85,5 @@ export class ChartDrawerComponent implements OnInit {
 
   getMinOfData(): number {
     return Math.min(...this.data);
-  }
-
-  private getMonthAndDay(str: string): string {
-    const splited = str.split(' ');
-
-    return splited.slice(1, 3).join(' ');
-  }
-
-  private getMonth(str: string): string {
-    const splited = str.split(' ');
-
-    return `${splited[1]} ${splited[3]}`;
   }
 }

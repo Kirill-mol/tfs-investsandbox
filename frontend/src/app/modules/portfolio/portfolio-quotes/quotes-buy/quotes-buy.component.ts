@@ -46,9 +46,6 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
     switchMap((searchLowerCase) =>
       this.stockMarketService.searchQuotes(searchLowerCase, this.portfolio.currency)
     ),
-    catchError(() => {
-      return of([]);
-    }),
     startWith([])
   );
 

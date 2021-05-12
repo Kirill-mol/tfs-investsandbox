@@ -1,4 +1,4 @@
-import { AuthFormTypeEnum } from './../../../../shared/models/authFormType.model';
+import { AccountFormTypeEnum } from '../../../../shared/models/accountFormType.model';
 import { NavigationService } from './../../../../shared/services/navigation.service';
 import { AuthService } from './../../../../shared/services/auth.service';
 import { IAuthToken } from './../../../../shared/interfaces/IAuth';
@@ -14,18 +14,18 @@ import { IBackend, IBackendToken } from 'src/shared/interfaces/IBackend';
 })
 export class AccountComponent {
   @Input()
-  nickname!: string;
+  name!: string;
 
   @Input()
   email!: string;
 
   editAccountFormOpened = false;
   editPasswordFormOpened = false;
-  authFormType = AuthFormTypeEnum;
+  authFormType = AccountFormTypeEnum;
 
   constructor(
     @Inject(IAuthToken) private authService: AuthService,
-    private navifationService: NavigationService
+    private navigationService: NavigationService
   ) {}
 
   turnEditAccountForm() {
@@ -44,6 +44,6 @@ export class AccountComponent {
 
   logout() {
     this.authService.logout();
-    this.navifationService.toLogin();
+    this.navigationService.toLogin();
   }
 }

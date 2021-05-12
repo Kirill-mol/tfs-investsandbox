@@ -7,11 +7,11 @@ import { InjectionToken } from '@angular/core';
 export const IStockMarketApiToken = new InjectionToken('IStockMarketApi');
 
 export interface IStockMarketApi {
-  searchQuotes(search: string): Observable<any>;
+  searchQuotes(search: string): Observable<any[]>;
 
-  getQuotesBySimbols(symbols: string[]): Observable<any[]>;
+  getQuoteBySimbol(symbol: string): Observable<any>;
 
-  getQuoteHistory(quote: Quote): Observable<any>;
+  getQuoteHistory(quote: Quote): Observable<number[]>;
 
   getCurrencyRate(from: Currency, to: Currency): Observable<number>;
 }

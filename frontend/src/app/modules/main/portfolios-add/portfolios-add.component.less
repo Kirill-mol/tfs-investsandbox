@@ -1,9 +1,22 @@
+@mobile: ~"(max-width: 430px)";
 .group {
   &-title {
     min-width: 500px;
+
+    @media @mobile {
+      min-width: 0;
+    }
   }
   &-currency {
     max-width: 200px;
+
+    @media @mobile {
+      max-width: 600px;
+    }
+  }
+
+  @media @mobile {
+    width: 100%;
   }
 }
 

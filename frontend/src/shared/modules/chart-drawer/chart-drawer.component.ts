@@ -1,14 +1,17 @@
-import { ChartSize, ChartSizeEnum } from './../../../shared/models/chartSize.model';
-import { Range, RangeEnum } from './../../../shared/models/range.model';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  Size,
+  SizeEnum,
+} from '../../models/size.model';
+import { Range, RangeEnum } from '../../models/range.model';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-chart-drawer',
   templateUrl: './chart-drawer.component.html',
   styleUrls: ['./chart-drawer.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartDrawerComponent {
+export class ChartDrawerComponent implements OnInit {
   private _day = 60 * 60 * 24 * 1000;
   private _month = this._day * 30;
 
@@ -19,11 +22,29 @@ export class ChartDrawerComponent {
   range: Range = RangeEnum.MONTH;
 
   @Input()
-  size: ChartSize = ChartSizeEnum.BIG;
+  size: Size = SizeEnum.L;
 
-  readonly chartSize = ChartSizeEnum;
+  readonly chartSize = SizeEnum;
 
-  readonly horizontalLinesCount = 8;
+  horizontalLinesCount = 8;
+
+  ngOnInit() {
+    if (this.size === SizeEnum.S) {
+      this.horizontalLinesCount = 3;
+    }
+  }
+
+  private getMonthAndDay(str: string): string {
+    const splited = str.split(' ');
+
+    return splited.slice(1, 3).join(' ');
+  }
+
+  private getMonth(str: string): string {
+    const splited = str.split(' ');
+
+    return `${splited[1]} ${splited[3]}`;
+  }
 
   getMapData(): [number, number][] {
     return this.data.map((val, index) => [index, val]);
@@ -46,18 +67,13 @@ export class ChartDrawerComponent {
   }
 
   getYLabels(): string[] {
-    const range = Math.round(
-      (this.getMaxOfData() * 1.05 - this.getMinOfData()) /
-        this.horizontalLinesCount
-    );
+    const range =
+      (this.getMaxOfData() * 1.05 - this.getMinOfData() * 0.95) /
+      (this.horizontalLinesCount);
     const labels: string[] = [];
 
-    for (
-      let i = 0;
-      i < (this.size === ChartSizeEnum.BIG ? this.horizontalLinesCount : 3);
-      i++
-    ) {
-      labels.push(Math.round(this.getMinOfData() + i * range).toString());
+    for (let i = 0; i <= this.horizontalLinesCount; i++) {
+      labels.push(Math.round(this.getMinOfData() * 0.95 + i * range).toString());
     }
 
     return labels;
@@ -69,17 +85,5 @@ export class ChartDrawerComponent {
 
   getMinOfData(): number {
     return Math.min(...this.data);
-  }
-
-  private getMonthAndDay(str: string): string {
-    const splited = str.split(' ');
-
-    return splited.slice(1, 3).join(' ');
-  }
-
-  private getMonth(str: string): string {
-    const splited = str.split(' ');
-
-    return `${splited[1]} ${splited[3]}`;
   }
 }

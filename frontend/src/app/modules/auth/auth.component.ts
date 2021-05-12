@@ -10,11 +10,11 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 })
 
 export class AuthComponent implements OnInit {
-  constructor(@Inject(IAuthToken) private authService: IAuth, private navigationService: NavigationService) {}
+  constructor(@Inject(IAuthToken) private authService: IAuth, private navigator: NavigationService) {}
 
   ngOnInit() {
     if (this.authService.getTokenValue()) {
-      this.navigationService.toMain();
+      this.navigator.toMain();
     }
   }
 }

@@ -13,7 +13,7 @@ import {
   Input,
   OnDestroy,
 } from '@angular/core';
-import { interval, Observable, Subject, Subscription } from 'rxjs';
+import { interval, Observable, of, Subject, Subscription } from 'rxjs';
 import {
   filter,
   startWith,
@@ -21,8 +21,11 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  tap,
+  catchError,
 } from 'rxjs/operators';
 import { TuiStringHandler } from '@taiga-ui/cdk';
+import { TuiOrientation } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-quotes-buy',
@@ -34,11 +37,17 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
   @Input()
   portfolio!: Portfolio;
 
-  search$ = new Subject<string>();
+  readonly search$ = new Subject<string>();
 
-  items$: Observable<ReadonlyArray<Quote> | null> = this.search$.pipe(
+  readonly isMobile = window.innerWidth <= 430;
+
+  readonly tuiVOrientation = TuiOrientation.Vertical;
+
+  readonly tuiHOrientation = TuiOrientation.Horizontal;
+
+  readonly items$: Observable<ReadonlyArray<Quote> | null> = this.search$.pipe(
     filter((value) => value != '' && value != null),
-    debounceTime(700),
+    debounceTime(500),
     distinctUntilChanged(),
     map((search) => search.toLowerCase()),
     switchMap((searchLowerCase) =>
@@ -100,7 +109,6 @@ export class QuotesBuyComponent implements OnInit, OnDestroy {
   }
 
   buyQuote() {
-    console.log(1);
     this.backendService.buyQuote(this.portfolio.title, {
       ...this.quote?.value,
       quantity: this.count?.value,

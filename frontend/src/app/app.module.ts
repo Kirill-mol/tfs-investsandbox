@@ -1,12 +1,12 @@
+import { PageNotFoundModule } from './modules/page-not-found/page-not-found.module';
+import { InterceptErrorInterceptor } from './../shared/interceptors/InterceptError.interceptor';
 import { ForexService } from './../shared/services/forex.service';
 import { IForexToken } from './../shared/interfaces/IForex';
 import { CalculateService } from './../shared/services/calculate.service';
 import { ICalculateToken } from './../shared/interfaces/ICalculate';
-import { AddYahooHeadersInterceptor } from './../shared/interceptors/AddYahooHeaders.interceptor copy';
 import { StockMarketApiService } from '../shared/services/stockMarketApi.service';
-import { AddMboumHeadersInterceptor } from '../shared/interceptors/AddMboumHeaders.interceptor';
 import { StockMarketService } from '../shared/services/stockMarket.service';
-import { AddTokenInterceptor } from './../shared/interceptors/AddToken.interceptor';
+import { AddTokenInterceptor } from '../shared/interceptors/addToken.interceptor';
 import { AuthService } from './../shared/services/auth.service';
 import { IAuthToken } from './../shared/interfaces/IAuth';
 import { BackendService } from './../shared/services/backend.service';
@@ -18,7 +18,7 @@ import { IBackendApiToken } from './../shared/interfaces/IBackendApi';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MainModule } from './modules/main/main.module';
-import { TuiRootModule, TUI_ICONS_PATH, iconsPathFactory } from '@taiga-ui/core';
+import { TuiRootModule, TUI_ICONS_PATH, iconsPathFactory, TuiNotificationsModule } from '@taiga-ui/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,8 +39,10 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     CommonModule,
     BrowserAnimationsModule,
     TuiRootModule,
+    TuiNotificationsModule,
     AuthModule,
     MainModule,
+    PageNotFoundModule,
     PortfolioModule,
     HttpClientModule,
     AppRoutingModule
@@ -89,12 +91,7 @@ import { IStockMarketToken } from 'src/shared/interfaces/IStockMarket';
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AddMboumHeadersInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AddYahooHeadersInterceptor,
+      useClass: InterceptErrorInterceptor,
       multi: true
     }
   ],

@@ -1,0 +1,4 @@
+<div class="logo" [class.logo_vertical]="orientation === 'v'">
+  <img *ngIf="type === 'all' || type === 'image'" [src]="size === 'L' ? '/assets/img/logo.svg' : '/assets/img/logo_s.svg'" alt="Investsandbox">
+  <img *ngIf="type === 'all' || type === 'text'" [src]="size === 'L' ? '/assets/img/logo_text.svg' : '/assets/img/logo_text_s.svg'" alt="Investsandbox">
+</div>

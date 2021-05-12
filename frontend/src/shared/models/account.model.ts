@@ -1,7 +1,7 @@
 import { Portfolio } from './portfolio.model';
 
 export type Account = {
-  nickname: string;
+  name: string;
   email: string;
   portfolios: Portfolio[];
 }

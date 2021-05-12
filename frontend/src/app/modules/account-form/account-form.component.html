@@ -3,27 +3,23 @@
     <ul class="tui-list" *ngIf="type === authFormType.REGISTRATION">
       <li class="tui-list__item requirement" [class.requirement_good]="validateNameLength()">Имя - не менее 3 знаков и не более 30</li>
       <li class="tui-list__item requirement" [class.requirement_good]="validateNamePattern()">Допустимые символы для имени: латиница, кириллица, цифры, пробел</li>
+      <li class="tui-list__item requirement" [class.requirement_good]="validateEmailPattern()">Действительная почта в формате example@example.com</li>
       <li class="tui-list__item requirement" [class.requirement_good]="validatePasswordLength()">Пароль - не менее 6 знаков и не более 30</li>
-      <li class="tui-list__item requirement" [class.requirement_good]="validateEmailPattern()">Действительная почта</li>
       <li class="tui-list__item requirement" [class.requirement_good]="validatePasswordConfirm()">Пароль подтвержден</li>
     </ul>
     <tui-group [orientation]="tuiVerticalOrientation">
-      <tui-group>
-        <tui-input *ngIf="type === authFormType.EDIT_ACCOUNT || type === authFormType.REGISTRATION" formControlName="name">
-          Имя
-        </tui-input>
-        <tui-input formControlName="email" *ngIf="type !== authFormType.EDIT_PASSWORD">
-          Почта
-        </tui-input>
-      </tui-group>
-      <tui-group>
-        <tui-input-password inputPassword formControlName="password" *ngIf="type !== authFormType.EDIT_ACCOUNT">
-          {{type === authFormType.EDIT_PASSWORD ? 'Новый пароль' : 'Пароль'}}
-        </tui-input-password>
-        <tui-input-password inputPassword *ngIf="type === authFormType.EDIT_PASSWORD || type === authFormType.REGISTRATION" formControlName="passwordConfirm">
-          Подтвердите {{type === authFormType.EDIT_PASSWORD ? 'новый' : ''}} пароль
-        </tui-input-password>
-      </tui-group>
+      <tui-input *ngIf="type === authFormType.EDIT_ACCOUNT || type === authFormType.REGISTRATION" formControlName="name">
+        Имя
+      </tui-input>
+      <tui-input formControlName="email" *ngIf="type !== authFormType.EDIT_PASSWORD">
+        Почта
+      </tui-input>
+      <tui-input-password inputPassword formControlName="password" *ngIf="type !== authFormType.EDIT_ACCOUNT">
+        {{type === authFormType.EDIT_PASSWORD ? 'Новый пароль' : 'Пароль'}}
+      </tui-input-password>
+      <tui-input-password inputPassword *ngIf="type === authFormType.EDIT_PASSWORD || type === authFormType.REGISTRATION" formControlName="passwordConfirm">
+        Подтвердите {{type === authFormType.EDIT_PASSWORD ? 'новый' : ''}} пароль
+      </tui-input-password>
     </tui-group>
     <button type="submit" tuiButton size="m" [disabled]="form.invalid">
       <span [ngSwitch]="type">

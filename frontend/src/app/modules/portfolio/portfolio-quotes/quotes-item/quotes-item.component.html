@@ -49,11 +49,18 @@
     ></tui-money>
     </div>
   </div>
-  <div>
+  <div *ngIf="!isMobile">
     <div class="tui-island__category">Годовой график</div>
     <app-chart-drawer
       [size]="chartSizes.S"
       [data]="quote.history.length ? quote.history : [0, 0]"
     ></app-chart-drawer>
   </div>
+</div>
+<div class="graphic_mobile" *ngIf="isMobile">
+  <div class="tui-island__category">Годовой график</div>
+  <app-chart-drawer
+    [size]="chartSizes.S"
+    [data]="quote.history.length ? quote.history : [0, 0]"
+  ></app-chart-drawer>
 </div>

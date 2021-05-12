@@ -10,13 +10,13 @@ import { QuoteTypeEnum } from 'src/shared/models/quoteType.model';
   styleUrls: ['./quotes-item.component.less']
 })
 export class QuotesItemComponent {
+  readonly quoteType = QuoteTypeEnum;
+  readonly chartSizes = SizeEnum;
+  readonly isMobile = window.innerWidth <= 430;
+
   @Input()
   quote!: Quote;
 
   @Input()
   portfolio!: Portfolio;
-
-  readonly quoteType = QuoteTypeEnum;
-
-  readonly chartSizes = SizeEnum;
 }

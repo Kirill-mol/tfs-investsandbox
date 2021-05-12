@@ -4,12 +4,13 @@ import { IAuth } from './../interfaces/IAuth';
 import { Inject, Injectable } from '@angular/core';
 import { Token } from '../models/token.model';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { IBackend, IBackendToken } from '../interfaces/IBackend';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService implements IAuth {
   constructor(
     @Inject(IBackendApiToken) private backendApiService: IBackendApi,
+    @Inject(IBackendToken) private backendService: IBackend,
     private storage: StorageService
   ) {}
 
@@ -40,6 +41,7 @@ export class AuthService implements IAuth {
 
   logout() {
     this.removeToken();
+    this.backendService.clearAccount();
   }
 
   registration(nickname: string, email: string, password: string) {

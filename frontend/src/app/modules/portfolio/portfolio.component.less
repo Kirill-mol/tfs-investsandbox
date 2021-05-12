@@ -1,17 +1,29 @@
+@mobile: ~"(max-width: 430px)";
+
 :host {
   display: block;
   margin: 0 auto;
   max-width: 1024px;
-  width: 75%;
+  padding-bottom: 40px;
+  width: 85%;
 }
 
 .link-to-main {
   font-size: 1.2rem;
   display: block;
-  margin-top: 15px;
+  opacity: 0.6;
+  left: 15px;
+  top: 5px;
+  position: fixed;
+  z-index: 1000;
 
   &:hover {
     color: var(--tui-link-hover);
+    opacity: 1;
+  }
+
+  @media @mobile {
+    font-size: 1rem;
   }
 }
 
@@ -19,6 +31,12 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+
+  @media @mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+  }
 }
 
 .info {
@@ -32,6 +50,10 @@
   gap: 20px;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-flow: row;
+
+  @media @mobile {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 button[appearance="custom"] {
@@ -39,7 +61,13 @@ button[appearance="custom"] {
   transition: 0.6s;
 
   &:hover {
-      background: var(--tui-error-bg-hover);
+    background: var(--tui-error-bg-hover);
+  }
+
+  @media @mobile {
+    background-color: var(--tui-error-fill);
+    color: #fff;
+    width: 100%;
   }
 }
 

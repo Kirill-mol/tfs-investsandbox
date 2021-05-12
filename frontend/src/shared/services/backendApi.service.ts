@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { Account } from '../models/account.model';
 import { Quote } from '../models/quote.model';
 import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BackendApiService implements IBackendApi {

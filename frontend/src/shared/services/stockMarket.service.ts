@@ -46,7 +46,7 @@ export class StockMarketService implements IStockMarket {
 
   private parseQuote(quote: any): Quote {
     return {
-      shortname: quote.shortName,
+      shortname: quote.longName,
       exchange: quote.exchange,
       quoteType: quote.quoteType,
       symbol: quote.symbol,

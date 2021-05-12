@@ -1,7 +1,14 @@
+@mobile: ~"(max-width: 430px)";
+
 .quote-content {
   align-items: center;
   display: flex;
   justify-content: space-between;
+  gap: 10px;
+
+  @media @mobile {
+    gap: 5px;
+  }
 
   &__shortname {
     > * {
@@ -9,23 +16,40 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      @media @mobile {
+        font-size: 1rem;
+        width: 160px;
+      }
     }
   }
 
   &__exchange {
     > * {
-      width: 80px;
+      max-width: 80px;
+    }
+
+    @media @mobile {
+      font-size: 0.8rem;
     }
   }
 
   &__price {
-    width: 120px;
+    max-width: 120px;
   }
 }
 
 .form {
+  @media @mobile {
+    width: 100%;
+  }
+
   &__quote-count {
     max-width: 150px;
+    
+    @media @mobile {
+      max-width: 100%;
+    }
   }
 
   &__row-submit {
@@ -36,6 +60,21 @@
     &__info {
       display: flex;
       gap: 20px;
+
+      @media @mobile {
+        flex-direction: column;
+      }
+    }
+
+    > button {
+      @media @mobile {
+        margin-top: 10px;
+        width: 100%;
+      }
+    }
+
+    @media @mobile {
+      flex-direction: column;
     }
   }
 }

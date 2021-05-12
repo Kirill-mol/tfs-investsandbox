@@ -1,7 +1,7 @@
 <tui-island>
   <form (submit)="submitForm()" class="tui-form" [formGroup]="form">
     <div class="tui-form__row">
-      <tui-group>
+      <tui-group [orientation]='isMobile ? tuiVOrientation : tuiHOrientation' class="group">
         <tui-input class="group-title" formControlName="title">
           Название
         </tui-input>

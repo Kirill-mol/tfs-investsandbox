@@ -20,6 +20,8 @@ export interface IBackend {
 
   getAccount(): Observable<Account>;
 
+  clearAccount(): void;
+
   initFromMain(): void;
 
   initFromPortfolio(portfolioTitle: string): void;

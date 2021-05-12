@@ -1,6 +1,12 @@
+@mobile: ~"(max-width: 430px)";
+
 .flex-container {
   display: flex;
   gap: 15px;
+
+  @media @mobile {
+    flex-direction: column;
+  }
 
   > * {
     flex: 1;

@@ -83,8 +83,8 @@ export class BackendService implements IBackend {
       balance: portfolio.balance,
       quotes: quotesParser(portfolio.quotes),
       history: {
-        onMonth: portfolio.monthHistory,
-        onAllTime: portfolio.allTimeHistory,
+        onMonth: Object.values(portfolio.monthHistory),
+        onAllTime: Object.values(portfolio.allTimeHistory),
       },
       realBalance: 0,
       income: {
@@ -134,6 +134,14 @@ export class BackendService implements IBackend {
         this._account = account;
       })
     );
+  }
+
+  clearAccount() {
+    this._account = {
+      email: '',
+      name: '',
+      portfolios: [],
+    };
   }
 
   initFromMain() {

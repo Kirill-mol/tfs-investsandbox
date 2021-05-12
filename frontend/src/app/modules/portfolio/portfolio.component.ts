@@ -33,6 +33,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   readonly ranges = RangeEnum;
 
+  readonly isMobile = window.innerWidth <= 430;
+
   portfolioLoaded = false;
 
   portfolio: Portfolio = {

@@ -1,7 +1,7 @@
 <tui-island>
   <form class="tui-form" *tuiLet="items$ | async as items" [formGroup]="form" (submit)="buyQuote()">
     <h3 class="tui-island__title">Купить ценные бумаги</h3>
-    <tui-group class="tui-form__row">
+    <tui-group [orientation]='isMobile ? tuiVOrientation : tuiHOrientation' class="tui-form__row form">
       <tui-combo-box
         formControlName="quote"
         [valueContent]="quoteSymbol"
@@ -46,12 +46,18 @@
   <div class="quote-content">
     <div class="quote-content__shortname">
       <div class="tui-text_h6">{{ data.shortname }}</div>
-      <div class="tui-text_body-m">{{ data.symbol }}</div>
+      <div class="tui-text_body-m">
+        {{ data.symbol }}
+        <span *ngIf="isMobile">
+          , {{data.exchange}}, 
+          <tui-money [currency]="data.currency" [value]="data.price"></tui-money>
+        </span>
+      </div>
     </div>
-    <div class="quote-content__exchange">
+    <div *ngIf="!isMobile" class="quote-content__exchange">
       <div class="tui-text_body-m">{{data.exchange}}</div>
     </div>
-    <div class="quote-content__price">
+    <div *ngIf="!isMobile" class="quote-content__price">
       <tui-money [currency]="data.currency" [value]="data.price"></tui-money>
     </div>
     <div>

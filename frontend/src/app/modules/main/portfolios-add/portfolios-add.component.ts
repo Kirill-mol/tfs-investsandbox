@@ -3,6 +3,7 @@ import { IBackendToken } from 'src/shared/interfaces/IBackend';
 import { CurrencyEnum } from './../../../../shared/models/currency.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { TuiOrientation } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-portfolios-add',
@@ -21,6 +22,12 @@ export class PortfoliosAddComponent {
       Validators.min(1),
     ]),
   });
+
+  isMobile = window.innerWidth <= 430;
+
+  tuiVOrientation = TuiOrientation.Vertical;
+
+  tuiHOrientation = TuiOrientation.Horizontal;
 
   constructor(@Inject(IBackendToken) private backendService: IBackend) {}
 

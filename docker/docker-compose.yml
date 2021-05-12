@@ -26,5 +26,16 @@ services:
     depends_on:
       - db
 
+  angular-ui:
+      build:
+        context: ../frontend
+        dockerfile: Dockerfile.development
+      ports:
+        - "4201:4201"
+      container_name: angular
+      volumes:
+         - ../frontend:/usr/local/app/frontend
+         - /usr/local/app/frontend/node_modules
+
 volumes:
   db-data:
